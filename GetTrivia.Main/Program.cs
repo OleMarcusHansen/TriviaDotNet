@@ -30,4 +30,26 @@ namespace GetTrivia.Main
 
         }
     }
+    struct answer
+    {
+        public string text;
+    }
+    struct categori
+    {
+        public string text;
+    }
+    struct question
+    {
+        public string text;
+        public answer correct;
+        public list<answer> wrong;
+        public categori categori;
+    }
+    struct quiz
+    {
+        public list<question> questions;
+        public list<categori> categori;
+        public int number;
+    }
+
 }
