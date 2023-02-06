@@ -23,7 +23,7 @@ namespace GetTrivia.Controllers
         /// <returns></returns>
 
         [HttpGet("TriviaCa")]
-        public async Task<string> TriviaCa(string category, int numbersofQuestions, string difficulty="easy")
+        public async Task<string> TriviaCa(string category="history", int numbersofQuestions=1, string difficulty="easy")
         {
             using var client = new HttpClient();
 
