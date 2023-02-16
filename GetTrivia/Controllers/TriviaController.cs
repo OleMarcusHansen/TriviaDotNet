@@ -31,7 +31,22 @@ namespace GetTrivia.Controllers
             var jsonFileUrl = $"https://the-trivia-api.com/api/questions?categories={category}&limit={numbersofQuestions}&difficulty={difficulty}";
             var jsonFile = await client.GetStringAsync(jsonFileUrl);
 
+            
+
             return jsonFile;
         }
     }
+    /*class question
+    {
+        public string category { get; set; }
+        public string id { get; set; }
+        public string correctAnswer { get; set; }
+        public string[] incorrectAnswers { get; set; }
+        public string question { get; set; }
+        public string[] tags { get; set; }
+        public string type { get; set; }
+        public string difficulty { get; set; }
+        public string[] regions { get; set; }
+        public bool isNiche { get; set; }
+    }*/
 }
