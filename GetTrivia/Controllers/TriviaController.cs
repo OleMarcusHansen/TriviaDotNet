@@ -1,4 +1,6 @@
+using GetTrivia.Intregations;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GetTrivia.Controllers
 {
@@ -23,7 +25,8 @@ namespace GetTrivia.Controllers
         /// <returns></returns>
 
         [HttpGet("TriviaCa")]
-        public async Task<string> TriviaCa(string category="history", int numbersofQuestions=1, string difficulty="easy")
+
+        public async Task<string> TriviaCa(string category = "history", int numbersofQuestions = 1, string difficulty = "easy")
         {
             using var client = new HttpClient();
 
@@ -32,6 +35,20 @@ namespace GetTrivia.Controllers
             var jsonFile = await client.GetStringAsync(jsonFileUrl);
 
             return jsonFile;
+
+
+            // Tried to implement apiClient Intregation, does not work :/ - Radin Morik
+            /*
+            public async Task <string> exportJSON(string category = "history", int numbersofQuestions = 1, string difficulty = "easy") {
+                var apiClient = new TriviaAPIClient();
+
+                var json = await apiClient.TriviaCa(category = "history", numbersofQuestions = 1,  difficulty = "easy");
+
+                return json;
+            } */
+
+
+
         }
     }
 }
