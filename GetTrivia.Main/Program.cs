@@ -1,4 +1,4 @@
-﻿using GetTrivia.Model.V1;
+﻿using GetTrivia.Main.Model;
 using System.Net.Http.Json;
 
 namespace GetTrivia.Main

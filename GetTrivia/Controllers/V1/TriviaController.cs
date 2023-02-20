@@ -1,5 +1,5 @@
 using GetTrivia.Intregations;
-using GetTrivia.Model.V1;
+using GetTrivia.GetTriviaService.Model.V1;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;

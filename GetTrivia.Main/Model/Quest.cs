@@ -1,4 +1,4 @@
-﻿namespace GetTrivia.Model.V1
+﻿namespace GetTrivia.Main.Model
 {
     public class Quest
     {
