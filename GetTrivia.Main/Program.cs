@@ -30,7 +30,7 @@ namespace GetTrivia.Main
 
             using var client = new HttpClient();
 
-            var jsonQnA = client.GetFromJsonAsync<quest[]>(url).Result;
+            var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
 
 
             // Limited to 100 questions
@@ -59,28 +59,17 @@ namespace GetTrivia.Main
             //Console.ReadLine();
         }
     }
-    class quiz
+    class Quest
     {
-        public quest[] QuestionList { get; set;}
+        public string CorrectAnswer { get; set; }
+        public string[] IncorrectAnswers { get; set; }
+        public string Question { get; set; }
     }
-    class quest
-    {
-        public string category { get; set; }
-        //public string id { get; set; }
-        public string correctAnswer { get; set; }
-        public string[] incorrectAnswers { get; set; }
-        public string question { get; set; }
-        public string[] tags { get; set; }
-        public string type { get; set; }
-        public string difficulty { get; set; }
-        public string[] regions { get; set; }
-        public bool isNiche { get; set; }
-    }
-    struct categori
+    /*struct categori
     {
         public string text;
     }
-    /*struct question
+    struct question
     {
         public string text;
         public answer correct;
