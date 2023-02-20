@@ -28,34 +28,33 @@ namespace GetTrivia.Main
 
 
             // Limited to 100 questions
-            for (int i = 0; i < jsonQnA.Length; i++)
+            foreach (var jsonQn in jsonQnA)
             {
-                Console.WriteLine("Press enter to get next question \n");
-                Console.WriteLine(jsonQnA[i].Question);
-                Console.WriteLine("\n");
+                //Console.WriteLine("Press enter to get next question \n");
+                Console.WriteLine(jsonQn.Question);
+                Console.WriteLine("Alternatives: ");
+                for (int i = 0; i<jsonQn.IncorrectAnswers.Length; i++)
+                {
+                    Console.WriteLine((i+1) + ". " + jsonQn.IncorrectAnswers[i]);
+                }
+                Console.WriteLine(4 + ". " + jsonQn.CorrectAnswer);
+                Console.WriteLine("");
                 Console.WriteLine("Skriv ditt svar:");
                 var answerInput = Console.ReadLine();
+                Console.WriteLine("");
+                if (answerInput == "4")
+                {
+                    Console.WriteLine("Correct!");
+                }
+                else
+                {
+                    Console.WriteLine("Wrong, the answer was: " + jsonQn.CorrectAnswer);
+                }
                 Console.WriteLine("\n");
-                Console.WriteLine(jsonQnA[i].CorrectAnswer);
-                Console.ReadLine();
             }
+            Console.WriteLine("Thank you for playing, press Enter to close");
+            Console.ReadLine();
 
-            //       if (answerInput == " " ){
-            /*
-            else if (i == jsonQnA.Length)
-            {
-                Console.WriteLine("Thank you for playing, closing now");
-            }
-            */
-
-
-            //JObject jobject = JObject.Parse(jsonQnA);
-            //var q = JsonConvert.DeserializeObject<quiz>(jsonQnA);
-
-            //Console.WriteLine(q)
-            //Console.ReadLine();
         }
-
-
     }
 }
