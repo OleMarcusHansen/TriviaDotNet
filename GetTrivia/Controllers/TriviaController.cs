@@ -1,6 +1,8 @@
 using GetTrivia.Intregations;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GetTrivia.Controllers
 {
@@ -32,11 +34,9 @@ namespace GetTrivia.Controllers
 
             //Er kategori og difficulty er valgfri, kan vi bruke ternery
             var jsonFileUrl = $"https://the-trivia-api.com/api/questions?categories={category}&limit={numbersofQuestions}&difficulty={difficulty}";
-            var jsonFile = await client.GetStringAsync(jsonFileUrl);
+            var questions = await client.GetFromJsonAsync<Quest[]>(jsonFileUrl);
 
-            
-
-            return jsonFile;
+            return JsonSerializer.Serialize(questions);
 
 
             // Tried to implement apiClient Intregation, does not work :/ - Radin Morik
@@ -53,17 +53,17 @@ namespace GetTrivia.Controllers
 
         }
     }
-    /*class question
+    class Quest
     {
-        public string category { get; set; }
-        public string id { get; set; }
-        public string correctAnswer { get; set; }
-        public string[] incorrectAnswers { get; set; }
-        public string question { get; set; }
-        public string[] tags { get; set; }
-        public string type { get; set; }
-        public string difficulty { get; set; }
-        public string[] regions { get; set; }
-        public bool isNiche { get; set; }
-    }*/
+        //public string category { get; set; }
+        //public string id { get; set; }
+        public string CorrectAnswer { get; set; }
+        public string[] IncorrectAnswers { get; set; }
+        public string Question { get; set; }
+        //public string[] tags { get; set; }
+        //public string Type { get; set; }
+        //public string Difficulty { get; set; }
+        //public string[] Regions { get; set; }
+        //public bool IsNiche { get; set; }
+    }
 }

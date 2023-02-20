@@ -30,11 +30,10 @@ namespace GetTrivia.Main
 
             using var client = new HttpClient();
 
-            var jsonQnA = client.GetFromJsonAsync<quest[]>(url).Result;
+            var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
 
-            Console.WriteLine(jsonQnA[0].category);
-            Console.WriteLine(jsonQnA[0].question);
-            Console.WriteLine(jsonQnA[0].correctAnswer);
+            Console.WriteLine(jsonQnA[0].Question);
+            Console.WriteLine(jsonQnA[0].CorrectAnswer);
             Console.ReadLine();
             //JObject jobject = JObject.Parse(jsonQnA);
             //var q = JsonConvert.DeserializeObject<quiz>(jsonQnA);
@@ -43,28 +42,17 @@ namespace GetTrivia.Main
             //Console.ReadLine();
         }
     }
-    class quiz
+    class Quest
     {
-        public quest[] QuestionList { get; set;}
+        public string CorrectAnswer { get; set; }
+        public string[] IncorrectAnswers { get; set; }
+        public string Question { get; set; }
     }
-    class quest
-    {
-        public string category { get; set; }
-        //public string id { get; set; }
-        public string correctAnswer { get; set; }
-        public string[] incorrectAnswers { get; set; }
-        public string question { get; set; }
-        public string[] tags { get; set; }
-        public string type { get; set; }
-        public string difficulty { get; set; }
-        public string[] regions { get; set; }
-        public bool isNiche { get; set; }
-    }
-    struct categori
+    /*struct categori
     {
         public string text;
     }
-    /*struct question
+    struct question
     {
         public string text;
         public answer correct;
