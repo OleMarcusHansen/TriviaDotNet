@@ -1,10 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using static System.Net.WebRequestMethods;
-using Newtonsoft;
-using Newtonsoft.Json;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json.Linq;
+﻿using GetTrivia.Model.V1;
 using System.Net.Http.Json;
 
 namespace GetTrivia.Main
@@ -24,9 +18,9 @@ namespace GetTrivia.Main
             Console.WriteLine("Tast inn vanskeligsgraden: ");
             string? difficulty = Console.ReadLine();
 
-            //https://localhost:7107/Trivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
+            //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
 
-            var url = $"https://localhost:7107/Trivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
+            var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
 
             using var client = new HttpClient();
 
@@ -58,28 +52,7 @@ namespace GetTrivia.Main
             //Console.WriteLine(q)
             //Console.ReadLine();
         }
+
+
     }
-    class Quest
-    {
-        public string CorrectAnswer { get; set; }
-        public string[] IncorrectAnswers { get; set; }
-        public string Question { get; set; }
-    }
-    /*struct categori
-    {
-        public string text;
-    }
-    struct question
-    {
-        public string text;
-        public answer correct;
-        public List<answer> wrong;
-        public categori categori;
-    }
-    struct quiz
-    {
-        public List<question> questions;
-        public List<categori> categori;
-        public int number;
-    }*/
 }

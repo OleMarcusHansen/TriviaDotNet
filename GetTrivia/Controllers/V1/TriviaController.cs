@@ -1,13 +1,14 @@
 using GetTrivia.Intregations;
+using GetTrivia.Model.V1;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace GetTrivia.Controllers
+namespace GetTrivia.Controllers.V1
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/1.0/GetTrivia")]
     public class TriviaController : ControllerBase
     {
 
@@ -52,18 +53,5 @@ namespace GetTrivia.Controllers
 
 
         }
-    }
-    class Quest
-    {
-        //public string category { get; set; }
-        //public string id { get; set; }
-        public string CorrectAnswer { get; set; }
-        public string[] IncorrectAnswers { get; set; }
-        public string Question { get; set; }
-        //public string[] tags { get; set; }
-        //public string Type { get; set; }
-        //public string Difficulty { get; set; }
-        //public string[] Regions { get; set; }
-        //public bool IsNiche { get; set; }
     }
 }
