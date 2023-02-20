@@ -38,9 +38,9 @@ namespace GetTrivia.Main
             {
             Console.WriteLine("Press enter to get next question");
             var answerInput = Console.ReadLine();
-            Console.WriteLine(jsonQnA[i].category);
-            Console.WriteLine(jsonQnA[i].question);
-            Console.WriteLine(jsonQnA[i].correctAnswer);
+            Console.WriteLine(jsonQnA[i].CorrectAnswer);
+            Console.WriteLine(jsonQnA[i].Question);
+            Console.WriteLine(jsonQnA[i].CorrectAnswer);
             Console.ReadLine();
          
              //       if (answerInput == " " ){
