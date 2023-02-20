@@ -32,14 +32,30 @@ namespace GetTrivia.Main
 
             var jsonQnA = client.GetFromJsonAsync<quest[]>(url).Result;
 
-            Console.WriteLine(jsonQnA[0].category);
-            Console.WriteLine(jsonQnA[0].question);
-            Console.WriteLine(jsonQnA[0].correctAnswer);
+
+            // Limited to 100 questions
+            for (int i = 0; i < jsonQnA.Length; i++)
+            {
+            Console.WriteLine("Press enter to get next question");
+            var answerInput = Console.ReadLine();
+            Console.WriteLine(jsonQnA[i].category);
+            Console.WriteLine(jsonQnA[i].question);
+            Console.WriteLine(jsonQnA[i].correctAnswer);
             Console.ReadLine();
+         
+             //       if (answerInput == " " ){
+                /*
+                else if (i == jsonQnA.Length)
+                {
+                    Console.WriteLine("Thank you for playing, closing now");
+                }
+                */
+            }
+
             //JObject jobject = JObject.Parse(jsonQnA);
             //var q = JsonConvert.DeserializeObject<quiz>(jsonQnA);
 
-            //Console.WriteLine(q);
+            //Console.WriteLine(q)
             //Console.ReadLine();
         }
     }
