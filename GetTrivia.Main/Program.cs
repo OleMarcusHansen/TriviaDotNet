@@ -36,21 +36,24 @@ namespace GetTrivia.Main
             // Limited to 100 questions
             for (int i = 0; i < jsonQnA.Length; i++)
             {
-            Console.WriteLine("Press enter to get next question");
-            var answerInput = Console.ReadLine();
-            Console.WriteLine(jsonQnA[i].CorrectAnswer);
-            Console.WriteLine(jsonQnA[i].Question);
-            Console.WriteLine(jsonQnA[i].CorrectAnswer);
-            Console.ReadLine();
-         
-             //       if (answerInput == " " ){
-                /*
-                else if (i == jsonQnA.Length)
-                {
-                    Console.WriteLine("Thank you for playing, closing now");
-                }
-                */
+                Console.WriteLine("Press enter to get next question \n");
+                Console.WriteLine(jsonQnA[i].Question);
+                Console.WriteLine("\n");
+                Console.WriteLine("Skriv ditt svar:");
+                var answerInput = Console.ReadLine();
+                Console.WriteLine("\n");
+                Console.WriteLine(jsonQnA[i].CorrectAnswer);
+                Console.ReadLine();
             }
+
+            //       if (answerInput == " " ){
+            /*
+            else if (i == jsonQnA.Length)
+            {
+                Console.WriteLine("Thank you for playing, closing now");
+            }
+            */
+
 
             //JObject jobject = JObject.Parse(jsonQnA);
             //var q = JsonConvert.DeserializeObject<quiz>(jsonQnA);
