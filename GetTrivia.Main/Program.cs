@@ -26,19 +26,17 @@ namespace GetTrivia.Main
 
             var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
 
-
-            // Limited to 100 questions
-            for (int i = 0; i < jsonQnA.Length; i++)
-            {
-                Console.WriteLine("Press enter to get next question \n");
-                Console.WriteLine(jsonQnA[i].Question);
-                Console.WriteLine("\n");
-                Console.WriteLine("Skriv ditt svar:");
-                var answerInput = Console.ReadLine();
-                Console.WriteLine("\n");
-                Console.WriteLine(jsonQnA[i].CorrectAnswer);
-                Console.ReadLine();
-            }
+                for (int i = 0; i < jsonQnA.Length; i++)
+                {
+                    Console.WriteLine("Press enter to get next question \n");
+                    Console.WriteLine(jsonQnA[i].Question);
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Skriv ditt svar:");
+                    var answerInput = Console.ReadLine();
+                    Console.WriteLine("\n");
+                    Console.WriteLine(jsonQnA[i].CorrectAnswer);
+                    Console.ReadLine();
+                }
 
             //       if (answerInput == " " ){
             /*
@@ -47,7 +45,7 @@ namespace GetTrivia.Main
                 Console.WriteLine("Thank you for playing, closing now");
             }
             */
-
+           
 
             //JObject jobject = JObject.Parse(jsonQnA);
             //var q = JsonConvert.DeserializeObject<quiz>(jsonQnA);
