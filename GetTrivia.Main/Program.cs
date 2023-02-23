@@ -21,11 +21,11 @@ namespace GetTrivia.Main
             //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
 
             var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
-
+            
             using var client = new HttpClient();
 
             var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
-
+            
 
             // Limited to 100 questions
             foreach (var jsonQn in jsonQnA)
@@ -33,16 +33,19 @@ namespace GetTrivia.Main
                 //Console.WriteLine("Press enter to get next question \n");
                 Console.WriteLine(jsonQn.Question);
                 Console.WriteLine("Alternatives: ");
-                for (int i = 0; i<jsonQn.IncorrectAnswers.Length; i++)
+                string[] allAnswers = new string[jsonQn.IncorrectAnswers.Length + 1];
+                Array.Copy(jsonQn.IncorrectAnswers, allAnswers, jsonQn.IncorrectAnswers.Length);
+                allAnswers[allAnswers.Length - 1] = jsonQn.CorrectAnswer;
+                Array.Sort(allAnswers);
+                for (int i = 0; i < allAnswers.Length; i++)
                 {
-                    Console.WriteLine((i+1) + ". " + jsonQn.IncorrectAnswers[i]);
+                    Console.WriteLine((i+1) + ". " + allAnswers[i]);
                 }
-                Console.WriteLine(4 + ". " + jsonQn.CorrectAnswer);
                 Console.WriteLine("");
                 Console.WriteLine("Skriv ditt svar:");
                 var answerInput = Console.ReadLine();
                 Console.WriteLine("");
-                if (answerInput == "4")
+                if (allAnswers[int.Parse(answerInput)-1] == jsonQn.CorrectAnswer)
                 {
                     Console.WriteLine("Correct!");
                 }
