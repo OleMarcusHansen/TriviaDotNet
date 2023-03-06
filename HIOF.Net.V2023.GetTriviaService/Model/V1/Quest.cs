@@ -1,4 +1,4 @@
-﻿namespace GetTrivia.Main.Model
+﻿namespace HIOF.Net.V2023.GetTriviaService.Model.V1
 {
     public class Quest
     {
