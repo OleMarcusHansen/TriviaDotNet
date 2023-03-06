@@ -7,6 +7,9 @@ namespace GetTrivia.Main
     {
         static void Main(string[] args)
         {
+            string[] catergoryList = { "Arts & Literature", "Film & TV", "Food & Drink", "General Knowledge", 
+            "Geography", "History", "Music", "Science", "Society & Culture", "Sport & Leisure"};
+
             Console.WriteLine("Hello, World!");
 
             Console.WriteLine("Tast inn kategory: ");
@@ -25,9 +28,7 @@ namespace GetTrivia.Main
             using var client = new HttpClient();
 
             var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
-            
 
-            // Limited to 100 questions
             foreach (var jsonQn in jsonQnA)
             {
                 //Console.WriteLine("Press enter to get next question \n");
