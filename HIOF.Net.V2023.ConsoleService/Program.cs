@@ -58,6 +58,8 @@ namespace HIOF.Net.V2023.ConsoleService
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();
 
+
+            Console.WriteLine("test push");
         }
     }
 }
