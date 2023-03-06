@@ -5,9 +5,9 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.GetTriviaService", "GetTrivia\HIOF.Net.V2023.GetTriviaService.csproj", "{E57FE0CF-30DF-40A9-B259-608D2CB25571}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.GetTrivia.Main", "GetTrivia.Main\HIOF.Net.V2023.GetTrivia.Main.csproj", "{9AE784D6-A89F-4303-834C-09EE6E615E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.GetTrivia.ConsoleService", "GetTrivia.Main\HIOF.Net.V2023.GetTrivia.ConsoleService.csproj", "{9AE784D6-A89F-4303-834C-09EE6E615E72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.DatabaseService", "HIOF.Net.V2023.DatabaseService\HIOF.Net.V2023.DatabaseService.csproj", "{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.DatabaseService", "HIOF.Net.V2023.DatabaseService\HIOF.Net.V2023.DatabaseService.csproj", "{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
