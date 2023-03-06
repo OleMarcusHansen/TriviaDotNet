@@ -1,4 +1,4 @@
-namespace HIOF.Net.V2023.GetTriviaService
+namespace GetTrivia
 {
     public class Program
     {
