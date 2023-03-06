@@ -1,7 +1,7 @@
-﻿using GetTrivia.Main.Model;
+﻿using GetTrivia.ConsoleService.Model;
 using System.Net.Http.Json;
 
-namespace GetTrivia.Main
+namespace GetTrivia.ConsoleService
 {
     internal class Program
     {
