@@ -16,9 +16,9 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         }
 
         [HttpGet("")]
-        public IEnumerable<UserData> Get()
+        public Result<IEnumerable<UserData>> Get()
         {
-            return new[]
+            var dummyData = new[]
             {
                 new UserData
                 {
@@ -33,20 +33,25 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                     Wrong = 0,
                 }
             };
+
+            return new Result<IEnumerable<UserData>> 
+            {
+                Value = dummyData
+            };
         }
 
         [HttpPost]
-        public UserData CreateUserData(PostUserData userDataPost)
+        public Result<UserData> CreateUserData(PostUserData userDataPost)
         {
             var result = new Result<UserData>();
 
-            result.Value
-
-            return new UserData
+            result.Value = new UserData
             {
                 Correct = userDataPost.Correct,
                 Wrong = userDataPost.Wrong
             };
+
+            return result;
         }
     }
 }
