@@ -4,6 +4,11 @@ namespace HIOF.Net.V2023.DatabaseService.Model.V1
 {
     public class Result<T>
     {
+        public Result(T value)
+        {
+            Value = value;
+        }
+
         public List<string> Errors { get; set; } = new List<string>();
 
         [JsonIgnore]

@@ -34,22 +34,17 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 }
             };
 
-            return new Result<IEnumerable<UserData>> 
-            {
-                Value = dummyData
-            };
+            return new Result<IEnumerable<UserData>>(dummyData);
         }
 
         [HttpPost]
         public Result<UserData> CreateUserData(PostUserData userDataPost)
         {
-            var result = new Result<UserData>();
-
-            result.Value = new UserData
+            var result = new Result<UserData>(new UserData
             {
                 Correct = userDataPost.Correct,
                 Wrong = userDataPost.Wrong
-            };
+            });
 
             return result;
         }
