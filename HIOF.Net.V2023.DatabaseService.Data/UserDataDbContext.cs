@@ -21,13 +21,6 @@ namespace HIOF.Net.V2023.DatabaseService.Data
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=LAPTOP-7FRPD23R;Initial Catalog=triviaTest;User ID=admin;Password=ANALfabet420;TrustServerCertificate=True");
-
-            base .OnConfiguring(optionsBuilder);
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserData>(mb =>

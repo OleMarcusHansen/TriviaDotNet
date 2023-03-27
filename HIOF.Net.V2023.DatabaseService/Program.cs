@@ -18,7 +18,7 @@ namespace HIOF.Net.V2023.DatabaseService
 
             builder.Services.AddDbContext<UserDataDbContext>(options =>
             {
-                options.UseSqlServer("Data Source=LAPTOP-7FRPD23R;Initial Catalog=triviaTest;User ID=admin;Password=ANALfabet420;TrustServerCertificate=True");
+                options.UseSqlServer(builder.Configuration.GetConnectionString("UserDataDb"));
             });
 
             var app = builder.Build();
@@ -44,7 +44,7 @@ namespace HIOF.Net.V2023.DatabaseService
 
             }
 
-            app.Run();
+             app.Run();
         }
     }
 }
