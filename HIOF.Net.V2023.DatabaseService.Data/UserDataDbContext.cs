@@ -11,9 +11,19 @@ namespace HIOF.Net.V2023.DatabaseService.Data
     {
         public DbSet<UserData> UserDatas { get; set; }
 
+        public UserDataDbContext()
+            {
+                
+            }
+
+        public UserDataDbContext(DbContextOptions options) : base(options) 
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("");
+            optionsBuilder.UseSqlServer("Data Source=LAPTOP-7FRPD23R;Initial Catalog=triviaTest;User ID=admin;Password=ANALfabet420;TrustServerCertificate=True");
 
             base .OnConfiguring(optionsBuilder);
         }

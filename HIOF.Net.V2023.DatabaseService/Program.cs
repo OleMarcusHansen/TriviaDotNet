@@ -1,4 +1,5 @@
 using HIOF.Net.V2023.DatabaseService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HIOF.Net.V2023.DatabaseService
 {
@@ -14,6 +15,11 @@ namespace HIOF.Net.V2023.DatabaseService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<UserDataDbContext>(options =>
+            {
+                options.UseSqlServer("Data Source=LAPTOP-7FRPD23R;Initial Catalog=triviaTest;User ID=admin;Password=ANALfabet420;TrustServerCertificate=True");
+            });
 
             var app = builder.Build();
 
@@ -31,8 +37,12 @@ namespace HIOF.Net.V2023.DatabaseService
 
             app.MapControllers();
 
-            var dbContext = new UserDataDbContext();
-            await dbContext.Database.EnsureCreatedAsync();
+            await using (var scope = app.Services.CreateAsyncScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
+                await dbContext.Database.MigrateAsync();
+
+            }
 
             app.Run();
         }
