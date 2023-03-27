@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.GetTrivia.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.DatabaseService", "HIOF.Net.V2023.DatabaseService\HIOF.Net.V2023.DatabaseService.csproj", "{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.DatabaseService.Data", "HIOF.Net.V2023.DatabaseService.Data\HIOF.Net.V2023.DatabaseService.Data.csproj", "{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB4F96E-DDA1-44A6-B141-0E642D9CE846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

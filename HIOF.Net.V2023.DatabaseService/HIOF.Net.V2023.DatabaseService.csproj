@@ -10,4 +10,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HIOF.Net.V2023.DatabaseService.Data\HIOF.Net.V2023.DatabaseService.Data.csproj" />
+  </ItemGroup>
+
 </Project>

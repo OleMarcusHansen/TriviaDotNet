@@ -1,8 +1,10 @@
+using HIOF.Net.V2023.DatabaseService.Data;
+
 namespace HIOF.Net.V2023.DatabaseService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,9 @@ namespace HIOF.Net.V2023.DatabaseService
 
 
             app.MapControllers();
+
+            var dbContext = new UserDataDbContext();
+            await dbContext.Database.EnsureCreatedAsync();
 
             app.Run();
         }

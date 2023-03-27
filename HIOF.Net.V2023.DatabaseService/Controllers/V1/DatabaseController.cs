@@ -38,10 +38,23 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         }
 
         [HttpPost]
-        public Result<UserData> CreateUserData(PostUserData userDataPost)
+        public async Task<Result<UserData>> CreateUserData(PostUserData userDataPost)
         {
+            var dbContext = new Data.UserDataDbContext();
+
+            var userData = new Data.UserData
+            {
+                Id = Guid.NewGuid(),
+                Correct = userDataPost.Correct,
+                Wrong = userDataPost.Wrong,
+            };
+
+            dbContext.UserDatas.Add(userData);
+            await dbContext.SaveChangesAsync();
+
             var result = new Result<UserData>(new UserData
             {
+                Id = userData.Id,
                 Correct = userDataPost.Correct,
                 Wrong = userDataPost.Wrong
             });
