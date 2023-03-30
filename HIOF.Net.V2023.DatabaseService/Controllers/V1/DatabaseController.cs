@@ -22,9 +22,6 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpGet("")]
         public async Task<Result<IEnumerable<Data.UserData>>> Get()
         {
-
-            //var dbContext = new UserDataDbContext();
-
             var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
