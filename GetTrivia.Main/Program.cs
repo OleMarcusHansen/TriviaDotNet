@@ -56,6 +56,9 @@ namespace GetTrivia.ConsoleService
                 }
                 Console.WriteLine("\n");
             }
+
+
+
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();
 

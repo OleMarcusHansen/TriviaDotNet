@@ -1,6 +1,7 @@
 using HIOF.Net.V2023.DatabaseService.Data;
 using HIOF.Net.V2023.DatabaseService.Model.V1;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 {
@@ -19,25 +20,19 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         }
 
         [HttpGet("")]
-        public Result<IEnumerable<Data.UserData>> Get()
+        public async Task<Result<IEnumerable<Data.UserData>>> Get()
         {
-            var dummyData = new[]
-            {
-                new Data.UserData
-                {
-                    Id = Guid.NewGuid(),
-                    Correct = 0,
-                    Wrong = 0,
-                },
-                new Data.UserData
-                {
-                    Id = Guid.NewGuid(),
-                    Correct = 0,
-                    Wrong = 0,
-                }
-            };
 
-            return new Result<IEnumerable<Data.UserData>>(dummyData);
+            //var dbContext = new UserDataDbContext();
+
+            var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
+            {
+                Id = userData.Id,
+                Correct = userData.Correct,
+                Wrong = userData.Wrong,
+            }).ToListAsync();
+
+            return new Result<IEnumerable<Data.UserData>>(responsUserData);
         }
 
         [HttpPost]
