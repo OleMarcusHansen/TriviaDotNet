@@ -31,6 +31,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             return new Result<IEnumerable<Data.UserData>>(responsUserData);
         }
+
         [HttpGet("{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
@@ -45,6 +46,30 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             }
 
             return new Result<Data.UserData>(responsUserData);
+        }
+
+        [HttpGet("average")]
+        public async Task<Result<Data.UserData>> GetAverageUserData()
+        {
+            var userDatas = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
+            {
+                Id = userData.Id,
+                Correct = userData.Correct,
+                Wrong = userData.Wrong,
+            }).ToListAsync();
+
+            var averageUserData = new Data.UserData();
+
+            foreach (var userData in userDatas)
+            {
+                averageUserData.Correct += userData.Correct;
+                averageUserData.Wrong += userData.Wrong;
+            }
+
+            averageUserData.Correct /= userDatas.Count;
+            averageUserData.Wrong /= userDatas.Count;
+
+            return new Result<Data.UserData>(averageUserData);
         }
 
         [HttpPost]
