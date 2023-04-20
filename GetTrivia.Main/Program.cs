@@ -29,38 +29,38 @@ namespace GetTrivia.ConsoleService
 
             var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
 
-            foreach (var jsonQn in jsonQnA)
-            {
-                //Console.WriteLine("Press enter to get next question \n");
-                Console.WriteLine(jsonQn.Question);
-                Console.WriteLine("Alternatives: ");
-                string[] allAnswers = new string[jsonQn.IncorrectAnswers.Length + 1];
-                Array.Copy(jsonQn.IncorrectAnswers, allAnswers, jsonQn.IncorrectAnswers.Length);
-                allAnswers[allAnswers.Length - 1] = jsonQn.CorrectAnswer;
-                Array.Sort(allAnswers);
-                for (int i = 0; i < allAnswers.Length; i++)
-                {
-                    Console.WriteLine((i+1) + ". " + allAnswers[i]);
-                }
-                Console.WriteLine("");
-                Console.WriteLine("Skriv ditt svar:");
-                var answerInput = Console.ReadLine();
-                Console.WriteLine("");
-                if (allAnswers[int.Parse(answerInput)-1] == jsonQn.CorrectAnswer)
-                {
-                    Console.WriteLine("Correct!");
-                }
-                else
-                {
-                    Console.WriteLine("Wrong, the answer was: " + jsonQn.CorrectAnswer);
-                }
-                Console.WriteLine("\n");
-            }
-            Console.WriteLine("Thank you for playing, press Enter to close");
-            Console.ReadLine();
+            //foreach (var jsonQn in jsonQnA)
+            //{
+            //    //Console.WriteLine("Press enter to get next question \n");
+            //    Console.WriteLine(jsonQn.Question);
+            //    Console.WriteLine("Alternatives: ");
+            //    //string[] allAnswers = new string[jsonQn.IncorrectAnswers.Length + 1];
+            //    //Array.Copy(jsonQn.IncorrectAnswers, allAnswers, jsonQn.IncorrectAnswers.Length);
+            //    allAnswers[allAnswers.Length - 1] = jsonQn.CorrectAnswer;
+            //    Array.Sort(allAnswers);
+            //    for (int i = 0; i < allAnswers.Length; i++)
+            //    {
+            //        Console.WriteLine((i+1) + ". " + allAnswers[i]);
+            //    }
+            //    Console.WriteLine("");
+            //    Console.WriteLine("Skriv ditt svar:");
+            //    var answerInput = Console.ReadLine();
+            //    Console.WriteLine("");
+            //    if (allAnswers[int.Parse(answerInput)-1] == jsonQn.CorrectAnswer)
+            //    {
+            //        Console.WriteLine("Correct!");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Wrong, the answer was: " + jsonQn.CorrectAnswer);
+            //    }
+            //    Console.WriteLine("\n");
+            //}
+            //Console.WriteLine("Thank you for playing, press Enter to close");
+            //Console.ReadLine();
 
 
-            Console.WriteLine("test push");
+            //Console.WriteLine("test push");
         }
     }
 }
