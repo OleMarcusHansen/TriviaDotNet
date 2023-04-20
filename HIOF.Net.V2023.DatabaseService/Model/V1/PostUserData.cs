@@ -5,5 +5,12 @@
         public Guid Id { get; set; }
         public int Correct { get; set; }
         public int Wrong { get; set; }
+
+        public PostUserData(Guid id, int correct, int wrong)
+        {
+            Id = id;
+            Correct = correct;
+            Wrong = wrong;
+        }
     }
 }

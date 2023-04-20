@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 {
     [ApiController]
-    [Route("V1/UserData")]
+    [Route("api/1.0/UserData")]
     public class DatabaseController : ControllerBase
     {
 
@@ -19,7 +19,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             _userDataDbContext = userDataDbContext;
         }
 
-        [HttpGet("")]
+        [HttpGet("getAll")]
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
             var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
@@ -72,7 +72,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(averageUserData);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<Result<Data.UserData>> CreateUserData(PostUserData userDataPost)
         {
 
@@ -96,9 +96,11 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
         
-        [HttpPut]
-        public async Task<Result<Data.UserData>> UpdateUserDataAdd(PostUserData userDataPost)
+        [HttpPut("update")]
+        public async Task<Result<Data.UserData>> UpdateUserDataAdd(Guid id, int correct, int wrong)
         {
+            PostUserData userDataPost = new PostUserData(id, correct, wrong);
+
             var userData = await _userDataDbContext.UserDatas.FindAsync(userDataPost.Id);
 
             if (userData == null)
