@@ -39,8 +39,9 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (responsUserData == null)
             {
-                return new Result<Data.UserData>(new Data.UserData())
+                return new Result<Data.UserData>(new Data.UserData { Id = id })
                 {
+                    
                     Errors = new List<string> { "UserData not found" }
                 };
             }
@@ -105,7 +106,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (userData == null)
             {
-                return new Result<Data.UserData>(new Data.UserData())
+                return new Result<Data.UserData>(new Data.UserData { Id = userDataPost.Id })
                 {
                     Errors = new List<string> { "UserData not found" }
                 };

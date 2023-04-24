@@ -66,7 +66,7 @@ namespace GetTrivia.ConsoleService
             url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
             var test = client.PutAsync(url, null).Result;
 
-            Console.WriteLine(test);
+            Console.WriteLine(test.Content.ReadAsStringAsync().Result);
 
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();
