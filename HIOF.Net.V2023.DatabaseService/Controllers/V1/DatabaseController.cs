@@ -42,6 +42,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 _logger.LogWarning("Userdata not found");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
+                    
                     Errors = new List<string> { "UserData not found" }
                 };
             }
