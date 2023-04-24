@@ -34,8 +34,15 @@ namespace GetTrivia.Controllers.V1
             using var client = new HttpClient();
 
             //Er kategori og difficulty er valgfri, kan vi bruke ternery
+            _logger.LogInformation("Getting data from API");
             var jsonFileUrl = $"https://the-trivia-api.com/api/questions?categories={category}&limit={numbersofQuestions}&difficulty={difficulty}";
             var questions = await client.GetFromJsonAsync<Quest[]>(jsonFileUrl);
+
+            if (category == null)
+            {
+                _logger.LogWarning("Invalid category name given");
+                NotFound();
+            }
 
             return JsonSerializer.Serialize(questions);
 

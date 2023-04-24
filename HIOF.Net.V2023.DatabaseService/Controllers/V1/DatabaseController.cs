@@ -39,6 +39,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (responsUserData == null)
             {
+                _logger.LogWarning("Userdata not found");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }
@@ -105,9 +106,11 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (userData == null)
             {
+                _logger.LogWarning("UserData not found");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }
+                    
                 };
             }
 
