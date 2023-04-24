@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.DatabaseServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.NotificationService", "NotificationService\HIOF.Net.V2023.NotificationService.csproj", "{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.WebApp", "HIOF.Net.V2023.WebApp\HIOF.Net.V2023.WebApp.csproj", "{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9AE784D6-A89F-4303-834C-09EE6E615E72} = {9AE784D6-A89F-4303-834C-09EE6E615E72}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +44,10 @@ Global
 		{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
