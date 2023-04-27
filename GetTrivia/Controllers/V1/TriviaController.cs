@@ -40,8 +40,21 @@ namespace GetTrivia.Controllers.V1
 
             if (category == null)
             {
-                _logger.LogWarning("Invalid category name given");
+                _logger.LogError("Invalid category name given");
                 NotFound();
+            }
+
+            if (numbersofQuestions >= 0)
+            {
+                _logger.LogError("Invalid Number of questions");
+                NotFound();
+            }
+            
+            if (difficulty == null)
+            {
+                _logger.LogError("Invalid difficulity given");
+                NotFound();
+          
             }
 
             return JsonSerializer.Serialize(questions);

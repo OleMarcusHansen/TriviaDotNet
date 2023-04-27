@@ -22,6 +22,8 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpGet("getAll")]
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
+            _logger.LogInformation("Called GetAllUserData");
+            _logger.LogInformation("Getting all user data");
             var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
@@ -53,6 +55,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpGet("average")]
         public async Task<Result<Data.UserData>> GetAverageUserData()
         {
+            _logger.LogInformation("Called GetAvarageUserData");
             var userDatas = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
@@ -71,13 +74,14 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             averageUserData.Correct /= userDatas.Count;
             averageUserData.Wrong /= userDatas.Count;
 
+            _logger.LogInformation("Returning avarage user data");
             return new Result<Data.UserData>(averageUserData);
         }
 
         [HttpPost("create")]
         public async Task<Result<Data.UserData>> CreateUserData(PostUserData userDataPost)
         {
-
+            _logger.LogInformation("Called CreateUserData");
             var userData = new Data.UserData
             {
                 Id = userDataPost.Id,
@@ -101,13 +105,14 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpPut("update")]
         public async Task<Result<Data.UserData>> UpdateUserDataAdd(Guid id, int correct, int wrong)
         {
+            _logger.LogInformation("Called UpdateUserDataAdd");
             PostUserData userDataPost = new PostUserData(id, correct, wrong);
 
             var userData = await _userDataDbContext.UserDatas.FindAsync(userDataPost.Id);
 
             if (userData == null)
             {
-                _logger.LogWarning("UserData not found");
+                _logger.LogError("UserData not found");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }

@@ -27,8 +27,17 @@ namespace GetTrivia.ConsoleService
             
             using var client = new HttpClient();
 
-            var jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
+            Quest[] jsonQnA;
 
+            try
+            {
+                jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             int correct = 0;
             int wrong = 0;
 
