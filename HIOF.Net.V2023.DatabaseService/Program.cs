@@ -21,6 +21,11 @@ namespace HIOF.Net.V2023.DatabaseService
                 options.UseSqlServer(builder.Configuration.GetConnectionString("UserDataDb"));
             });
 
+            builder.Services.AddDbContext<HighScoreDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("HighScoreDb"));
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,17 +36,16 @@ namespace HIOF.Net.V2023.DatabaseService
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             await using (var scope = app.Services.CreateAsyncScope())
             {
-                var dbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
-                await dbContext.Database.MigrateAsync();
+                var userDataDbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
+                await userDataDbContext.Database.MigrateAsync();
 
+                var highScoreDbContext = scope.ServiceProvider.GetService<HighScoreDbContext>();
+                await highScoreDbContext.Database.MigrateAsync();
             }
 
              app.Run();

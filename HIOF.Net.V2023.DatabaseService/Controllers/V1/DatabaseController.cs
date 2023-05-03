@@ -6,20 +6,22 @@ using Microsoft.EntityFrameworkCore;
 namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 {
     [ApiController]
-    [Route("api/1.0/UserData")]
+    [Route("api/1.0")]
     public class DatabaseController : ControllerBase
     {
 
         private readonly ILogger<DatabaseController> _logger;
         private readonly UserDataDbContext _userDataDbContext;
+        private readonly HighScoreDbContext _highScoreDbContext;
 
-        public DatabaseController(ILogger<DatabaseController> logger, UserDataDbContext userDataDbContext)
+        public DatabaseController(ILogger<DatabaseController> logger, UserDataDbContext userDataDbContext, HighScoreDbContext highScoreDbContext)
         {
             _logger = logger;
             _userDataDbContext = userDataDbContext;
+            _highScoreDbContext = highScoreDbContext;
         }
 
-        [HttpGet("getAll")]
+        [HttpGet("UserData/getAll")]
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
             var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
@@ -32,7 +34,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<IEnumerable<Data.UserData>>(responsUserData);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("UserData/get/{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
             var responsUserData = await _userDataDbContext.UserDatas.FindAsync(id);
@@ -50,7 +52,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(responsUserData);
         }
 
-        [HttpGet("average")]
+        [HttpGet("UserData/average")]
         public async Task<Result<Data.UserData>> GetAverageUserData()
         {
             var userDatas = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
@@ -74,7 +76,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(averageUserData);
         }
 
-        [HttpPost("create")]
+        [HttpPost("UserData/create")]
         public async Task<Result<Data.UserData>> CreateUserData(PostUserData userDataPost)
         {
 
@@ -98,7 +100,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
         
-        [HttpPut("update")]
+        [HttpPut("UserData/update")]
         public async Task<Result<Data.UserData>> UpdateUserDataAdd(Guid id, int correct, int wrong)
         {
             PostUserData userDataPost = new PostUserData(id, correct, wrong);
@@ -126,6 +128,35 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Id = userData.Id,
                 Correct = userData.Correct,
                 Wrong = userData.Wrong
+            });
+
+            return result;
+        }
+
+        [HttpPost("HighScore/create")]
+        public async Task<Result<Data.HighScore>> CreateHighScore(PostHighScore highScorePost)
+        {
+            var userData = await _userDataDbContext.UserDatas.FindAsync(highScorePost.Id);
+
+            var highScore = new Data.HighScore
+            {
+                Id = highScorePost.Id,
+                Category = highScorePost.Category,
+                Correct = highScorePost.Correct,
+                Wrong = highScorePost.Wrong,
+                User = userData
+            };
+
+            _highScoreDbContext.HighScores.Add(highScore);
+            await _highScoreDbContext.SaveChangesAsync();
+
+            var result = new Result<Data.HighScore>(new Data.HighScore
+            {
+                Id = highScore.Id,
+                Category = highScore.Category,
+                Correct = highScorePost.Correct,
+                Wrong = highScorePost.Wrong,
+                User = userData
             });
 
             return result;

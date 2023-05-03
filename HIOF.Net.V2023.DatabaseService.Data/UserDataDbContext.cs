@@ -12,11 +12,11 @@ namespace HIOF.Net.V2023.DatabaseService.Data
         public DbSet<UserData> UserDatas { get; set; }
 
         public UserDataDbContext()
-            {
+        {
                 
-            }
+        }
 
-        public UserDataDbContext(DbContextOptions options) : base(options) 
+        public UserDataDbContext(DbContextOptions<UserDataDbContext> options) : base(options) 
         {
 
         }
