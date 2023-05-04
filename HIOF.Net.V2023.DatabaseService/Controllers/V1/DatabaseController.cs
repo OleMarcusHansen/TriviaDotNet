@@ -23,7 +23,8 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
             _logger.LogInformation("Called GetAllUserData");
-            _logger.LogInformation("Getting all user data");
+            var userDataList = await _userDataDbContext.UserDatas.ToListAsync();
+            _logger.LogInformation($"Getting all user data {userDataList.Count}");
             var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
@@ -38,10 +39,11 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
             var responsUserData = await _userDataDbContext.UserDatas.FindAsync(id);
+            _logger.LogInformation("Getting userdata");
 
             if (responsUserData == null)
             {
-                _logger.LogWarning("Userdata not found");
+                _logger.LogError("An error accured while getting all userdata(Userdata not found)");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
                     
@@ -112,7 +114,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (userData == null)
             {
-                _logger.LogError("UserData not found");
+                _logger.LogError("An error occured while updating userData. (UserData not found)");
                 return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }
@@ -131,7 +133,9 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Id = userData.Id,
                 Correct = userData.Correct,
                 Wrong = userData.Wrong
+
             });
+
 
             return result;
         }
