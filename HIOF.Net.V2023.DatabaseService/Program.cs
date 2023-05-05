@@ -1,5 +1,6 @@
 using HIOF.Net.V2023.DatabaseService.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace HIOF.Net.V2023.DatabaseService
 {
@@ -44,8 +45,10 @@ namespace HIOF.Net.V2023.DatabaseService
                 var userDataDbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
                 await userDataDbContext.Database.MigrateAsync();
 
+                Debug.WriteLine("test før");
                 var highScoreDbContext = scope.ServiceProvider.GetService<HighScoreDbContext>();
-                await highScoreDbContext.Database.MigrateAsync();
+                await highScoreDbContext.Database.EnsureCreatedAsync();
+                Debug.WriteLine("test etter");
             }
 
              app.Run();

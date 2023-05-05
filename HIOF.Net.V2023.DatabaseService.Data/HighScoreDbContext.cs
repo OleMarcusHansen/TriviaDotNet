@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace HIOF.Net.V2023.DatabaseService.Data
 
         public HighScoreDbContext(DbContextOptions<HighScoreDbContext> options) : base(options)
         {
-
+            Debug.WriteLine("test");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

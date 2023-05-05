@@ -7,15 +7,12 @@
         public int Correct { get; set; }
         public int Wrong { get; set; }
 
-        public Data.UserData User { get; set; }
-
-        public PostHighScore(Guid id, string category, int correct, int wrong, Data.UserData user)
+        public PostHighScore(Guid id, string category, int correct, int wrong)
         {
             Id = id;
             Category = category;
             Correct = correct;
             Wrong = wrong;
-            User = user;
         }
     }
 }

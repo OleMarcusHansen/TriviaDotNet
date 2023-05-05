@@ -9,7 +9,7 @@ namespace HIOF.Net.V2023.DatabaseService.Data
 {
     public class UserDataDbContext : DbContext
     {
-        public DbSet<UserData> UserDatas { get; set; }
+        public DbSet<UserData> UserData { get; set; }
 
         public UserDataDbContext()
         {
