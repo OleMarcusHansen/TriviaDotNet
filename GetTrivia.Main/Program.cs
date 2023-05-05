@@ -41,7 +41,7 @@ namespace GetTrivia.ConsoleService
             int correct = 0;
             int wrong = 0;
 
-            /*foreach (var jsonQn in jsonQnA)
+            foreach (var jsonQn in jsonQnA)
             {
                 //Console.WriteLine("Press enter to get next question \n");
                 Console.WriteLine(jsonQn.Question);
@@ -69,7 +69,7 @@ namespace GetTrivia.ConsoleService
                     wrong++;
                 }
                 Console.WriteLine("\n");
-            }*/
+            }
 
             //url = $"https://localhost:7160/api/1.0/UserData/00000000-0000-0000-0000-000000000001";
             url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
