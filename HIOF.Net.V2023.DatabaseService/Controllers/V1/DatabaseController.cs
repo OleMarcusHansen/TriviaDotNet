@@ -127,6 +127,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             _userDataDbContext.UserDatas.Update(userData);
             await _userDataDbContext.SaveChangesAsync();
+            _logger.LogInformation("Saving changes to database");
 
             var result = new Result<Data.UserData>(new Data.UserData
             {
