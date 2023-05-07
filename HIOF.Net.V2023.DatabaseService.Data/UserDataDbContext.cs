@@ -10,6 +10,7 @@ namespace HIOF.Net.V2023.DatabaseService.Data
 {
     public class UserDataDbContext : DbContext
     {
+        public DbSet<UserData> UserData { get; set; }
         public DbSet<UserData> UserDatas { get; set; }
         private readonly ILogger<UserDataDbContext> _logger;
 
@@ -19,11 +20,11 @@ namespace HIOF.Net.V2023.DatabaseService.Data
         }
 
         public UserDataDbContext()
-            {
+        {
                 
-            }
+        }
 
-        public UserDataDbContext(DbContextOptions options) : base(options) 
+        public UserDataDbContext(DbContextOptions<UserDataDbContext> options) : base(options) 
         {
 
         }

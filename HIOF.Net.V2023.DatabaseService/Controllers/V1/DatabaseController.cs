@@ -6,42 +6,44 @@ using Microsoft.EntityFrameworkCore;
 namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 {
     [ApiController]
-    [Route("api/1.0/UserData")]
+    [Route("api/1.0")]
     public class DatabaseController : ControllerBase
     {
 
         private readonly ILogger<DatabaseController> _logger;
         private readonly UserDataDbContext _userDataDbContext;
+        private readonly HighScoreDbContext _highScoreDbContext;
 
-        public DatabaseController(ILogger<DatabaseController> logger, UserDataDbContext userDataDbContext)
+        public DatabaseController(ILogger<DatabaseController> logger, UserDataDbContext userDataDbContext, HighScoreDbContext highScoreDbContext)
         {
             _logger = logger;
             _userDataDbContext = userDataDbContext;
+            _highScoreDbContext = highScoreDbContext;
         }
 
-        [HttpGet("getAll")]
+        [HttpGet("UserData/getAll")]
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
             _logger.LogInformation("Called GetAllUserData");
-            var userDataList = await _userDataDbContext.UserDatas.ToListAsync();
-            _logger.LogInformation($"Getting all user data {userDataList.Count}");
-            var responsUserData = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
+            _logger.LogInformation("Getting all user data");
+            var responseUserData = await _userDataDbContext.UserData.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
                 Correct = userData.Correct,
                 Wrong = userData.Wrong,
             }).ToListAsync();
 
-            return new Result<IEnumerable<Data.UserData>>(responsUserData);
+            return new Result<IEnumerable<Data.UserData>>(responseUserData);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("UserData/get/{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
             var responsUserData = await _userDataDbContext.UserDatas.FindAsync(id);
             _logger.LogInformation("Getting userdata");
+            var responseUserData = await _userDataDbContext.UserData.FindAsync(id);
 
-            if (responsUserData == null)
+            if (responseUserData == null)
             {
                 _logger.LogError("An error accured while getting all userdata(Userdata not found)");
                 return new Result<Data.UserData>(new Data.UserData())
@@ -51,14 +53,14 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 };
             }
 
-            return new Result<Data.UserData>(responsUserData);
+            return new Result<Data.UserData>(responseUserData);
         }
 
-        [HttpGet("average")]
+        [HttpGet("UserData/average")]
         public async Task<Result<Data.UserData>> GetAverageUserData()
         {
             _logger.LogInformation("Called GetAvarageUserData");
-            var userDatas = await _userDataDbContext.UserDatas.Select(userData => new Data.UserData
+            var userDatas = await _userDataDbContext.UserData.Select(userData => new Data.UserData
             {
                 Id = userData.Id,
                 Correct = userData.Correct,
@@ -80,7 +82,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(averageUserData);
         }
 
-        [HttpPost("create")]
+        [HttpPost("UserData/create")]
         public async Task<Result<Data.UserData>> CreateUserData(PostUserData userDataPost)
         {
             _logger.LogInformation("Called CreateUserData");
@@ -91,7 +93,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Wrong = userDataPost.Wrong,
             };
 
-            _userDataDbContext.UserDatas.Add(userData);
+            _userDataDbContext.UserData.Add(userData);
             await _userDataDbContext.SaveChangesAsync();
 
             var result = new Result<Data.UserData>(new Data.UserData
@@ -104,13 +106,12 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
         
-        [HttpPut("update")]
+        [HttpPut("UserData/update")]
         public async Task<Result<Data.UserData>> UpdateUserDataAdd(Guid id, int correct, int wrong)
         {
             _logger.LogInformation("Called UpdateUserDataAdd");
-            PostUserData userDataPost = new PostUserData(id, correct, wrong);
 
-            var userData = await _userDataDbContext.UserDatas.FindAsync(userDataPost.Id);
+            var userData = await _userDataDbContext.UserData.FindAsync(id);
 
             if (userData == null)
             {
@@ -122,10 +123,10 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 };
             }
 
-            userData.Correct += userDataPost.Correct;
-            userData.Wrong += userDataPost.Wrong;
+            userData.Correct += correct;
+            userData.Wrong += wrong;
 
-            _userDataDbContext.UserDatas.Update(userData);
+            _userDataDbContext.UserData.Update(userData);
             await _userDataDbContext.SaveChangesAsync();
             _logger.LogInformation("Saving changes to database");
 
@@ -137,6 +138,113 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             });
 
+
+            return result;
+        }
+
+        [HttpPost("HighScore/create")]
+        public async Task<Result<Data.HighScore>> CreateHighScore(PostHighScore highScorePost)
+        {
+            var userData = await _userDataDbContext.UserData.FindAsync(highScorePost.Id);
+            if (userData == null)
+            {
+                _logger.LogWarning("Userdata attached to highscore not found");
+                return new Result<HighScore>(new HighScore())
+                {
+                    Errors = new List<string> { "Userdata attached to highscore not found" }
+                };
+            }
+
+            var highScore = new Data.HighScore
+            {
+                Id = highScorePost.Id,
+                Category = highScorePost.Category,
+                Correct = highScorePost.Correct,
+                Wrong = highScorePost.Wrong
+            };
+
+            _highScoreDbContext.HighScores.Add(highScore);
+            await _highScoreDbContext.SaveChangesAsync();
+
+            var result = new Result<Data.HighScore>(new Data.HighScore
+            {
+                Id = highScore.Id,
+                Category = highScore.Category,
+                Correct = highScorePost.Correct,
+                Wrong = highScorePost.Wrong,
+                User = userData
+            });
+
+            return result;
+        }
+
+        [HttpGet("HighScore/get/{id}/{category}")]
+        public async Task<Result<Data.HighScore>> GetHighScore(Guid id, string category)
+        {
+            var userData = await _userDataDbContext.UserData.FindAsync(id);
+            if (userData == null)
+            {
+                _logger.LogWarning("Userdata attached to highscore not found");
+                return new Result<HighScore>(new HighScore())
+                {
+                    Errors = new List<string> { "Userdata attached to highscore not found" }
+                };
+            }
+
+            var responseHighScore = await _highScoreDbContext.HighScores.FindAsync(id, category);
+            if (responseHighScore == null)
+            {
+                _logger.LogWarning("Highscore not found");
+                return new Result<HighScore>(new HighScore())
+                {
+                    Errors = new List<string> { "Highscore not found" }
+                };
+            }
+
+            responseHighScore.User = userData;
+
+            return new Result<HighScore>(responseHighScore);
+        }
+
+        [HttpPut("HighScore/update")]
+        public async Task<Result<Data.HighScore>> UpdateHighScore(PostHighScore highScorePost)
+        {
+            _logger.LogInformation("Called UpdateHighScore");
+            
+            var userData = await _userDataDbContext.UserData.FindAsync(highScorePost.Id);
+            if (userData == null)
+            {
+                _logger.LogWarning("Userdata attached to highscore not found");
+                return new Result<HighScore>(new HighScore())
+                {
+                    Errors = new List<string> { "Userdata attached to highscore not found" }
+                };
+            }
+
+            var highScore = await _highScoreDbContext.HighScores.FindAsync(highScorePost.Id, highScorePost.Category);
+            if (highScore == null)
+            {
+                _logger.LogWarning("Highscore not found");
+                return new Result<HighScore>(new HighScore())
+                {
+                    Errors = new List<string> { "Highscore not found" }
+                };
+            }
+
+            highScore.Correct = highScorePost.Correct;
+            highScore.Wrong = highScorePost.Wrong;
+
+            _highScoreDbContext.HighScores.Update(highScore);
+            await _highScoreDbContext.SaveChangesAsync();
+
+            var result = new Result<HighScore>(new HighScore
+            {
+                Id = highScore.Id,
+                Category = highScore.Category,
+                Correct = highScore.Correct,
+                Wrong = highScore.Wrong,
+                User = userData
+            });
 
             return result;
         }

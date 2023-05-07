@@ -1,5 +1,6 @@
 using HIOF.Net.V2023.DatabaseService.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace HIOF.Net.V2023.DatabaseService
 {
@@ -21,6 +22,11 @@ namespace HIOF.Net.V2023.DatabaseService
                 options.UseSqlServer(builder.Configuration.GetConnectionString("UserDataDb"));
             });
 
+            builder.Services.AddDbContext<HighScoreDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("HighScoreDb"));
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,17 +37,18 @@ namespace HIOF.Net.V2023.DatabaseService
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             await using (var scope = app.Services.CreateAsyncScope())
             {
-                var dbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
-                await dbContext.Database.MigrateAsync();
+                var userDataDbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
+                await userDataDbContext.Database.MigrateAsync();
 
+                Debug.WriteLine("test før");
+                var highScoreDbContext = scope.ServiceProvider.GetService<HighScoreDbContext>();
+                await highScoreDbContext.Database.EnsureCreatedAsync();
+                Debug.WriteLine("test etter");
             }
 
              app.Run();
