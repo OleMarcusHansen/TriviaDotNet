@@ -44,9 +44,8 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (responseUserData == null)
             {
                 _logger.LogWarning("Userdata not found");
-                return new Result<Data.UserData>(new Data.UserData())
+                return new Result<Data.UserData>(new Data.UserData { Id=id})
                 {
-                    
                     Errors = new List<string> { "UserData not found" }
                 };
             }
@@ -114,10 +113,9 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (userData == null)
             {
                 _logger.LogError("UserData not found");
-                return new Result<Data.UserData>(new Data.UserData())
+                return new Result<Data.UserData>(new Data.UserData { Id=id})
                 {
                     Errors = new List<string> { "UserData not found" }
-                    
                 };
             }
 
@@ -144,7 +142,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (userData == null)
             {
                 _logger.LogWarning("Userdata attached to highscore not found");
-                return new Result<HighScore>(new HighScore())
+                return new Result<HighScore>(new HighScore { Id=highScorePost.Id})
                 {
                     Errors = new List<string> { "Userdata attached to highscore not found" }
                 };
@@ -180,7 +178,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (userData == null)
             {
                 _logger.LogWarning("Userdata attached to highscore not found");
-                return new Result<HighScore>(new HighScore())
+                return new Result<HighScore>(new HighScore { Id=id})
                 {
                     Errors = new List<string> { "Userdata attached to highscore not found" }
                 };
@@ -190,7 +188,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (responseHighScore == null)
             {
                 _logger.LogWarning("Highscore not found");
-                return new Result<HighScore>(new HighScore())
+                return new Result<HighScore>(new HighScore { Id=id, Category=category})
                 {
                     Errors = new List<string> { "Highscore not found" }
                 };
@@ -210,7 +208,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (userData == null)
             {
                 _logger.LogWarning("Userdata attached to highscore not found");
-                return new Result<HighScore>(new HighScore())
+                return new Result<HighScore>(new HighScore { Id=highScorePost.Id})
                 {
                     Errors = new List<string> { "Userdata attached to highscore not found" }
                 };
@@ -220,7 +218,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (highScore == null)
             {
                 _logger.LogWarning("Highscore not found");
-                return new Result<HighScore>(new HighScore())
+                return new Result<HighScore>(new HighScore { Id=highScorePost.Id, Category=highScorePost.Category})
                 {
                     Errors = new List<string> { "Highscore not found" }
                 };

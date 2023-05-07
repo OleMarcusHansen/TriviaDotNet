@@ -27,13 +27,12 @@ namespace GetTrivia.ConsoleService
             
             using var client = new HttpClient();
 
-            Quest[] jsonQnA;
+            Quest[] jsonQnA = new Quest[0];
 
             try
             {
                 jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -41,7 +40,7 @@ namespace GetTrivia.ConsoleService
             int correct = 0;
             int wrong = 0;
 
-            /*foreach (var jsonQn in jsonQnA)
+            foreach (var jsonQn in jsonQnA)
             {
                 //Console.WriteLine("Press enter to get next question \n");
                 Console.WriteLine(jsonQn.Question);
@@ -69,13 +68,18 @@ namespace GetTrivia.ConsoleService
                     wrong++;
                 }
                 Console.WriteLine("\n");
-            }*/
+            }
 
             //url = $"https://localhost:7160/api/1.0/UserData/00000000-0000-0000-0000-000000000001";
             url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
             var test = client.PutAsync(url, null).Result;
 
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
+
+            //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
+            url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/{pickCat}";
+            var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
+
 
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();
