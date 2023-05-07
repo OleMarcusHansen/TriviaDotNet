@@ -1,4 +1,6 @@
 ﻿using GetTrivia.ConsoleService.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
 
 namespace GetTrivia.ConsoleService
@@ -78,8 +80,23 @@ namespace GetTrivia.ConsoleService
 
             //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
             url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/{pickCat}";
-            var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
+            //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
+            var jsonHS = client.GetStringAsync(url).Result;
+            var json = JObject.Parse(jsonHS);
+            var value = json["value"].ToString();
+            var earera = JsonConvert.DeserializeObject<HighScore>(value);
 
+            if (jsonHS != null)
+            {
+                Console.WriteLine(earera.Id);
+                Console.WriteLine(earera.Category);
+                Console.WriteLine(earera.Correct);
+                Console.WriteLine(earera.Wrong);
+            }
+            else
+            {
+                Console.WriteLine("null");
+            }
 
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();

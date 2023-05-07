@@ -39,14 +39,13 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpGet("UserData/get/{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
-            var responsUserData = await _userDataDbContext.UserDatas.FindAsync(id);
             _logger.LogInformation("Getting userdata");
             var responseUserData = await _userDataDbContext.UserData.FindAsync(id);
 
             if (responseUserData == null)
             {
                 _logger.LogError("An error accured while getting all userdata(Userdata not found)");
-                return new Result<Data.UserData>(new Data.UserData())
+                return new Result<Data.UserData>(new Data.UserData { Id=id})
                 {
                     Errors = new List<string> { "UserData not found" }
                 };
