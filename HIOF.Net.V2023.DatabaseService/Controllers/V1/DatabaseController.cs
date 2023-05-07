@@ -39,12 +39,14 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         [HttpGet("UserData/get/{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
+            var responsUserData = await _userDataDbContext.UserDatas.FindAsync(id);
+            _logger.LogInformation("Getting userdata");
             var responseUserData = await _userDataDbContext.UserData.FindAsync(id);
 
             if (responseUserData == null)
             {
-                _logger.LogWarning("Userdata not found");
-                return new Result<Data.UserData>(new Data.UserData { Id=id})
+                _logger.LogError("An error accured while getting all userdata(Userdata not found)");
+                return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }
                 };
@@ -113,7 +115,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             if (userData == null)
             {
                 _logger.LogError("UserData not found");
-                return new Result<Data.UserData>(new Data.UserData { Id=id})
+                return new Result<Data.UserData>(new Data.UserData())
                 {
                     Errors = new List<string> { "UserData not found" }
                 };
@@ -124,13 +126,16 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             _userDataDbContext.UserData.Update(userData);
             await _userDataDbContext.SaveChangesAsync();
+            _logger.LogInformation("Saving changes to database");
 
             var result = new Result<Data.UserData>(new Data.UserData
             {
                 Id = userData.Id,
                 Correct = userData.Correct,
                 Wrong = userData.Wrong
+
             });
+
 
             return result;
         }
