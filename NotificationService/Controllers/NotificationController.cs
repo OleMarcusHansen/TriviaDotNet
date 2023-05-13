@@ -10,6 +10,7 @@ namespace NotificationService.Controllers
     {
 
         private readonly ILogger<NotificationController> _logger;
+        private readonly Inotification
 
         public NotificationController(ILogger<NotificationController> logger)
         {

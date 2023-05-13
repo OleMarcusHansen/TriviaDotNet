@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.DatabaseServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.DatabaseService.Data", "HIOF.Net.V2023.DatabaseService.Data\HIOF.Net.V2023.DatabaseService.Data.csproj", "{E589EEE7-44E5-42B0-8FE4-2FE8A59C679B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.NotificationService", "NotificationService\HIOF.Net.V2023.NotificationService.csproj", "{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.Notification", "NotificationService\HIOF.Net.V2023.Notification.csproj", "{0CFF819C-7FB6-414C-9F24-FDC5FEAD7691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIOF.Net.V2023.WebApp", "HIOF.Net.V2023.WebApp\HIOF.Net.V2023.WebApp.csproj", "{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIOF.Net.V2023.WebApp", "HIOF.Net.V2023.WebApp\HIOF.Net.V2023.WebApp.csproj", "{DDD509F5-1262-4E5D-89C2-3DED2D03AD3F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9AE784D6-A89F-4303-834C-09EE6E615E72} = {9AE784D6-A89F-4303-834C-09EE6E615E72}
 	EndProjectSection
