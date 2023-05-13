@@ -51,8 +51,9 @@ else
     <ul>
         @{
             int id = 1;
+            var question = nextQuestion();
         }
-        @foreach (var question in questions)
+        @if (question != null)
         {
 
             <li>
@@ -62,7 +63,7 @@ else
                 {
 @*                    <input type="radio" id=@(id) name=@(id) value="HTML">*@
 @*                    <label for="html">@answer</label>*@
-                    <button class="btn btn-primary" id=@(id) name=@(id) value=@answer @onclick="() => checkAnswer(answer)">@answer</button>
+                    <button class="btn btn-primary" id=@(id) name=@(id) value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
                     <br />
 
                 }
@@ -72,19 +73,23 @@ else
 
             </li>
         }
+        else
+        {
+            <p>No more questions...</p>
+        }
     </ul>
 
 }
 
 @code {
-    private int currentCount = 0;
+    //private int currentCount = 0;
     private string pickCategory = "history";
     private string pickDifficulty = "easy";
     private int amount = 1;
     public List<Quest> questions;
 
     private int score = 0;
-    private int questionNumber = 0;
+    //private int questionNumber = 0;
 
 
 
@@ -121,15 +126,25 @@ else
         return answers;
     }
 
-    private void checkAnswer(string answer)
+    private void checkAnswer(string answer, Quest question)
     {
-        Console.WriteLine(questions[questionNumber].CorrectAnswer);
-        if (answer == questions[questionNumber].CorrectAnswer) {
-            questionNumber++;
+        Console.WriteLine(question.CorrectAnswer);
+        if (answer == question.CorrectAnswer) {
+            //questionNumber++;
             score++;
         }
 
-        Console.WriteLine(score);   
+        Console.WriteLine(score);
+        //nextQuestion();
+    }
+
+    private Quest nextQuestion()
+    {
+        if (questions.Count < 1)
+            return null;
+        Quest next = questions.First();
+        questions.Remove(next);
+        return next;
     }
 
 
