@@ -1,32 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
-using NotificationService.Model.V1;
+using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using HIOF.Net.V2023.Notification;
+using Microsoft.Data.SqlClient;
+using HIOF.Net.V2023.Notification.Services;
+using Microsoft.AspNetCore.Authorization;
 
-namespace NotificationService.Controllers
+namespace HIOF.Net.V2023.Controller
 {
     [ApiController]
     [Route("[controller]")]
     public class NotificationController : ControllerBase
     {
+        private readonly INotificationSink _notificationSink;
 
-        private readonly ILogger<NotificationController> _logger;
-        private readonly Inotification
+        public NotificationController(INotificationSink notificationSink) => _notificationSink = notificationSink;
 
-        public NotificationController(ILogger<NotificationController> logger)
+        [Authorize]
+        [HttpGet("/notify")]
+        public async Task<IActionResult> Notify(string user, string message)
         {
-            _logger = logger;
+            await _notificationSink.PushAsync(new HIOF.Net.V2023.Notification.Services.Notification(user, message));
+            return Ok();
         }
-
-        [HttpGet(Name = "GetNotificationRequest")]
-
-        public IActionResult GetNotification(int userid)
-        {
-            var Notification = new Notification { Message= "Come back and play ! We have not seen you in four years :/", UserID = userid};
-            string json = JsonSerializer.Serialize(Notification, new JsonSerializerOptions { WriteIndented= true });    
-            return Ok(json);
-        }
-
-
-
     }
 }
