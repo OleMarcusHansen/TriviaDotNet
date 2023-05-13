@@ -79,23 +79,22 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
 
             //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
-            url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/{pickCat}";
+            url = $"https://localhost:7160/api/1.0/HighScore/compareExisting?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
             //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
             var jsonHS = client.GetStringAsync(url).Result;
             var json = JObject.Parse(jsonHS);
             var value = json["value"].ToString();
             var earera = JsonConvert.DeserializeObject<HighScore>(value);
 
-            if (jsonHS != null)
+            if (earera.Correct == 0 && earera.Wrong == 0)
             {
-                Console.WriteLine(earera.Id);
-                Console.WriteLine(earera.Category);
-                Console.WriteLine(earera.Correct);
-                Console.WriteLine(earera.Wrong);
+                url = $"https://localhost:7160/api/1.0/HighScore/create?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
+                var newHighScore = client.PostAsync(url, null).Result;
             }
-            else
+            else if (earera.Correct == correct && earera.Wrong == wrong)
             {
-                Console.WriteLine("null");
+                url = $"https://localhost:7160/api/1.0/HighScore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
+                var newHighScore = client.PutAsync(url, null).Result;
             }
 
             Console.WriteLine("Thank you for playing, press Enter to close");
