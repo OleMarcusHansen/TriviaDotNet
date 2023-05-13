@@ -11,7 +11,6 @@ namespace HIOF.Net.V2023.DatabaseService.Data
     public class UserDataDbContext : DbContext
     {
         public DbSet<UserData> UserData { get; set; }
-        public DbSet<UserData> UserDatas { get; set; }
         private readonly ILogger<UserDataDbContext> _logger;
 
         public UserDataDbContext(ILogger<UserDataDbContext> logger)
@@ -19,14 +18,9 @@ namespace HIOF.Net.V2023.DatabaseService.Data
             _logger = logger;
         }
 
-        public UserDataDbContext()
+        public UserDataDbContext(ILogger<UserDataDbContext> logger, DbContextOptions<UserDataDbContext> options) : base(options) 
         {
-                
-        }
-
-        public UserDataDbContext(DbContextOptions<UserDataDbContext> options) : base(options) 
-        {
-
+            _logger = logger;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

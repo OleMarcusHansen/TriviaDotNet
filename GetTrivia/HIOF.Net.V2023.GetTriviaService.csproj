@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\GrpcGreeterClient\Protos\greet.proto" GrpcServices="Client">
+      <Link>Protos\greet.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\GrpcGreeter\Protos\greet.proto" GrpcServices="Server">
+      <Link>Protos\greet.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
