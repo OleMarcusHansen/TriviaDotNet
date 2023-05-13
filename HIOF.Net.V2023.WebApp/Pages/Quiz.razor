@@ -60,9 +60,9 @@ else
 
                 @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
                 {
-
-                    <input type="radio" id=@(id) name=@(id) value="HTML">
-                    <label for="html">@answer</label>
+@*                    <input type="radio" id=@(id) name=@(id) value="HTML">*@
+@*                    <label for="html">@answer</label>*@
+                    <button class="btn btn-primary" id=@(id) name=@(id) value=@answer @onclick="() => checkAnswer(answer)">@answer</button>
                     <br />
 
                 }
@@ -73,6 +73,7 @@ else
             </li>
         }
     </ul>
+
 }
 
 @code {
@@ -80,7 +81,11 @@ else
     private string pickCategory = "history";
     private string pickDifficulty = "easy";
     private int amount = 1;
-    private List<Quest> questions;
+    public List<Quest> questions;
+
+    private int score = 0;
+    private int questionNumber = 0;
+
 
 
 
@@ -115,4 +120,17 @@ else
 
         return answers;
     }
+
+    private void checkAnswer(string answer)
+    {
+        Console.WriteLine(questions[questionNumber].CorrectAnswer);
+        if (answer == questions[questionNumber].CorrectAnswer) {
+            questionNumber++;
+            score++;
+        }
+
+        Console.WriteLine(score);   
+    }
+
+
 }
