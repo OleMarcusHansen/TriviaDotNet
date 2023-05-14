@@ -47,8 +47,8 @@ namespace GetTrivia.ConsoleService
                 //Console.WriteLine("Press enter to get next question \n");
                 Console.WriteLine(jsonQn.Question);
                 Console.WriteLine("Alternatives: ");
-                string[] allAnswers = new string[jsonQn.IncorrectAnswers.Length + 1];
-                Array.Copy(jsonQn.IncorrectAnswers, allAnswers, jsonQn.IncorrectAnswers.Length);
+                string[] allAnswers = new string[jsonQn.IncorrectAnswers.Count + 1];
+                Array.Copy(jsonQn.IncorrectAnswers.ToArray(), allAnswers, jsonQn.IncorrectAnswers.Count);
                 allAnswers[allAnswers.Length - 1] = jsonQn.CorrectAnswer;
                 Array.Sort(allAnswers);
                 for (int i = 0; i < allAnswers.Length; i++)
