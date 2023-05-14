@@ -47,20 +47,19 @@
             }
             @if (question != null)
             {
-                    <h2>@question.Question</h2>
+                <h2>@question.Question</h2>
 
-                    @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
-                    {
-                        <button class="buttonStyle" value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
-            }
+                @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
+                {
+                <button class="buttonStyle" value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
+                }
                 <p>@question.CorrectAnswer</p>
             }
             else
             {
-                <p>No more questions...your score is @score of @amount</p>
-                    <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
-                    <button class="buttonStyle">Save your score</button>
- 
+                <h2>No more questions...your score is @score of @amount</h2>
+                <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
+                <button class="buttonStyle">Save your score</button>
             }
         </section>
         }
