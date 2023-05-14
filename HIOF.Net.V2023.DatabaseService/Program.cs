@@ -45,10 +45,8 @@ namespace HIOF.Net.V2023.DatabaseService
                 var userDataDbContext = scope.ServiceProvider.GetService<UserDataDbContext>();
                 await userDataDbContext.Database.MigrateAsync();
 
-                Debug.WriteLine("test før");
                 var highScoreDbContext = scope.ServiceProvider.GetService<HighScoreDbContext>();
-                await highScoreDbContext.Database.EnsureCreatedAsync();
-                Debug.WriteLine("test etter");
+                await highScoreDbContext.Database.MigrateAsync();
             }
 
              app.Run();
