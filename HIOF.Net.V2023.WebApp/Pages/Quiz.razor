@@ -1,0 +1,136 @@
+﻿@page "/quiz"
+@using GetTrivia.ConsoleService.Model;
+
+<PageTitle>Quiz</PageTitle>
+
+<div id="container">
+<div hidden="@showInputFromUser">
+    <h1>Welcome to Quizgame</h1>
+    <p>Pick category</p>
+    <select @bind="pickCategory">
+        <option value="music">music</option>
+        <option value="sport_and_leisure">sport and leisure</option>
+        <option value="film_and_tv">film and tv</option>
+        <option value="arts_and_literature">arts_and_literature</option>
+        <option value="history">history</option>
+        <option value="society_and_culture">society_and_culture</option>
+        <option value="science">science</option>
+        <option value="geography">geography</option>
+        <option value="food_and_drink">food_and_drink</option>
+        <option value="general_knowledge">general_knowledge</option>
+    </select>
+    <br>
+    <br>
+
+    <p>Input amount of question(s):</p>
+    <input type="number" @bind-value="@amount" />
+    <br>
+    <br>
+
+    <p>Choose difficulty:</p>
+    <select @bind="pickDifficulty">
+        <option value="easy">easy</option>
+        <option value="medium">medium</option>
+        <option value="hard">hard</option>
+    </select>
+    <br>
+    <br>
+
+    <button class="btn btn-primary" @onclick="HandleClick">Click me</button>
+</div>
+<br>
+<br>
+
+<h1>Trivia Questions</h1>
+
+@if (questions == null)
+{
+    <p>Loading questions...</p>
+}
+else
+{
+    <ul>
+        @{
+            int id = 1;
+            var question = nextQuestion();
+        }
+        @if (question != null)
+        {
+            <li>
+                <h2>@question.Question</h2>
+
+                @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
+                {
+                    <button class="btn btn-primary" id=@(id) name=@(id) value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
+                    <br />
+        }
+                @{
+                    id++;
+                }
+
+            </li>
+            <p>@question.CorrectAnswer</p>
+        }
+        else
+        {
+            <p>No more questions...your score is @score of @amount</p>
+        }
+    </ul>
+}
+</div>
+@code {
+    private string pickCategory = "history";
+    private string pickDifficulty = "easy";
+    private int amount = 1;
+    private List<Quest> questions;
+    private int score = 0;
+    private bool showInputFromUser { get; set; } = false;
+
+    private void HandleClick()
+    {
+        var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCategory}&numbersofQuestions={amount}&difficulty={pickDifficulty}";
+
+        //få httpclient t interface?
+        using var client = new HttpClient();
+        var jsonQnA = client.GetFromJsonAsync<List<Quest>>(url).Result;
+        questions = jsonQnA;
+
+        showInputFromUser = !showInputFromUser;
+    }
+
+    private List<string> GetRandomizedAnswers(List<string> answers, string correctAnswer)
+    {
+        // Add the correct answer to the list of possible answers
+        answers.Add(correctAnswer);
+
+        // Shuffle the list of answers using Fisher-Yates shuffle algorithm
+        Random random = new Random();
+        int n = answers.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            string temp = answers[k];
+            answers[k] = answers[n];
+            answers[n] = temp;
+        }
+        return answers;
+    }
+
+    private void checkAnswer(string answer, Quest question)
+    {
+        Console.WriteLine(question.CorrectAnswer);
+        if (answer == question.CorrectAnswer) {
+            score++;
+        }
+    }
+
+    private Quest nextQuestion()
+    {
+        if (questions.Count < 1)
+            return null;
+        Quest next = questions.First();
+        questions.Remove(next);
+        return next;
+    }
+}
