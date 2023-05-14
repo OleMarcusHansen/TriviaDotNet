@@ -234,7 +234,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 };
             }
 
-            if ((float)highScore.Correct / highScore.Wrong < (float)existingHighScore.Correct / existingHighScore.Wrong)
+            if ((float)highScore.Correct / highScore.Wrong <= (float)existingHighScore.Correct / existingHighScore.Wrong)
             {
                 highScore.Correct = existingHighScore.Correct;
                 highScore.Wrong = existingHighScore.Wrong;
