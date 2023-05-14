@@ -3,40 +3,41 @@
 
 <PageTitle>Quiz</PageTitle>
 
-<h1>Welcome to Quizgame</h1>
-<p>Tast inn kategori</p>
-<select @bind="pickCategory">
-    <option value="music">music</option>
-    <option value="sport_and_leisure">sport and leisure</option>
-    <option value="film_and_tv">film and tv</option>
-    <option value="arts_and_literature">arts_and_literature</option>
-    <option value="history">history</option>
-    <option value="society_and_culture">society_and_culture</option>
-    <option value="science">science</option>
-    <option value="geography">geography</option>
-    <option value="food_and_drink">food_and_drink</option>
-    <option value="general_knowledge">general_knowledge</option>
-</select>
-<br>
-<br>
+<div id="container">
+<div hidden="@showInputFromUser">
+    <h1>Welcome to Quizgame</h1>
+    <p>Pick category</p>
+    <select @bind="pickCategory">
+        <option value="music">music</option>
+        <option value="sport_and_leisure">sport and leisure</option>
+        <option value="film_and_tv">film and tv</option>
+        <option value="arts_and_literature">arts_and_literature</option>
+        <option value="history">history</option>
+        <option value="society_and_culture">society_and_culture</option>
+        <option value="science">science</option>
+        <option value="geography">geography</option>
+        <option value="food_and_drink">food_and_drink</option>
+        <option value="general_knowledge">general_knowledge</option>
+    </select>
+    <br>
+    <br>
 
-<p>Tast inn antall spørsmål:</p>
-<input type="number" @bind-value="@amount" />
-<br>
-<br>
+    <p>Input amount of question(s):</p>
+    <input type="number" @bind-value="@amount" />
+    <br>
+    <br>
 
-<p>Tast inn vanskeligsgraden:</p>
-<select @bind="pickDifficulty">
-    <option value="easy">easy</option>
-    <option value="medium">medium</option>
-    <option value="hard">hard</option>
-</select>
-<br>
-<br>
+    <p>Choose difficulty:</p>
+    <select @bind="pickDifficulty">
+        <option value="easy">easy</option>
+        <option value="medium">medium</option>
+        <option value="hard">hard</option>
+    </select>
+    <br>
+    <br>
 
-
-<button class="btn btn-primary" @onclick="HandleClick">Click me</button>
-
+    <button class="btn btn-primary" @onclick="HandleClick">Click me</button>
+</div>
 <br>
 <br>
 
@@ -55,44 +56,35 @@ else
         }
         @if (question != null)
         {
-
             <li>
                 <h2>@question.Question</h2>
 
                 @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
                 {
-@*                    <input type="radio" id=@(id) name=@(id) value="HTML">*@
-@*                    <label for="html">@answer</label>*@
                     <button class="btn btn-primary" id=@(id) name=@(id) value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
                     <br />
-
-                }
+        }
                 @{
                     id++;
                 }
 
             </li>
+            <p>@question.CorrectAnswer</p>
         }
         else
         {
-            <p>No more questions...</p>
+            <p>No more questions...your score is @score of @amount</p>
         }
     </ul>
-
 }
-
+</div>
 @code {
-    //private int currentCount = 0;
     private string pickCategory = "history";
     private string pickDifficulty = "easy";
     private int amount = 1;
-    public List<Quest> questions;
-
+    private List<Quest> questions;
     private int score = 0;
-    //private int questionNumber = 0;
-
-
-
+    private bool showInputFromUser { get; set; } = false;
 
     private void HandleClick()
     {
@@ -103,7 +95,7 @@ else
         var jsonQnA = client.GetFromJsonAsync<List<Quest>>(url).Result;
         questions = jsonQnA;
 
-        Console.WriteLine(questions);
+        showInputFromUser = !showInputFromUser;
     }
 
     private List<string> GetRandomizedAnswers(List<string> answers, string correctAnswer)
@@ -122,7 +114,6 @@ else
             answers[k] = answers[n];
             answers[n] = temp;
         }
-
         return answers;
     }
 
@@ -130,12 +121,8 @@ else
     {
         Console.WriteLine(question.CorrectAnswer);
         if (answer == question.CorrectAnswer) {
-            //questionNumber++;
             score++;
         }
-
-        Console.WriteLine(score);
-        //nextQuestion();
     }
 
     private Quest nextQuestion()
@@ -146,6 +133,4 @@ else
         questions.Remove(next);
         return next;
     }
-
-
 }

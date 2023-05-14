@@ -1,0 +1,17 @@
+﻿* {
+    margin: 0 auto;
+    box-sizing: border-box;
+    border: 5px solid black;
+}
+
+
+main {
+    border: 10px solid red;
+}
+
+#container {
+    border: 10px solid green;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
