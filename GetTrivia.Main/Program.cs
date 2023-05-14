@@ -9,8 +9,7 @@ namespace GetTrivia.ConsoleService
     {
         static void Main(string[] args)
         {
-            string[] catergoryList = { "Arts & Literature", "Film & TV", "Food & Drink", "General Knowledge", 
-            "Geography", "History", "Music", "Science", "Society & Culture", "Sport & Leisure"};
+            //string[] catergoryList = { "Arts & Literature", "Film & TV", "Food & Drink", "General Knowledge", "Geography", "History", "Music", "Science", "Society & Culture", "Sport & Leisure"};
 
             Console.WriteLine("Hello, World!");
 
@@ -29,7 +28,7 @@ namespace GetTrivia.ConsoleService
             
             using var client = new HttpClient();
 
-            Quest[] jsonQnA = new Quest[0];
+            Quest[] jsonQnA = Array.Empty<Quest>();
 
             try
             {
@@ -42,14 +41,14 @@ namespace GetTrivia.ConsoleService
             int correct = 0;
             int wrong = 0;
 
-            foreach (var jsonQn in jsonQnA)
+            foreach (Quest jsonQn in jsonQnA)
             {
                 //Console.WriteLine("Press enter to get next question \n");
                 Console.WriteLine(jsonQn.Question);
                 Console.WriteLine("Alternatives: ");
                 string[] allAnswers = new string[jsonQn.IncorrectAnswers.Count + 1];
                 Array.Copy(jsonQn.IncorrectAnswers.ToArray(), allAnswers, jsonQn.IncorrectAnswers.Count);
-                allAnswers[allAnswers.Length - 1] = jsonQn.CorrectAnswer;
+                allAnswers[^1] = jsonQn.CorrectAnswer;
                 Array.Sort(allAnswers);
                 for (int i = 0; i < allAnswers.Length; i++)
                 {
@@ -81,17 +80,17 @@ namespace GetTrivia.ConsoleService
             //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
             url = $"https://localhost:7160/api/1.0/HighScore/compareExisting?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
             //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
-            var jsonHS = client.GetStringAsync(url).Result;
-            var json = JObject.Parse(jsonHS);
-            var value = json["value"].ToString();
-            var earera = JsonConvert.DeserializeObject<HighScore>(value);
+            string jsonHS = client.GetStringAsync(url).Result;
+            JObject json = JObject.Parse(jsonHS);
+            string value = json["value"].ToString();
+            HighScore? highScore = JsonConvert.DeserializeObject<HighScore>(value);
 
-            if (earera.Correct == 0 && earera.Wrong == 0)
+            if (highScore.Correct == 0 && highScore.Wrong == 0)
             {
                 url = $"https://localhost:7160/api/1.0/HighScore/create?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
                 var newHighScore = client.PostAsync(url, null).Result;
             }
-            else if (earera.Correct == correct && earera.Wrong == wrong)
+            else if (highScore.Correct == correct && highScore.Wrong == wrong)
             {
                 url = $"https://localhost:7160/api/1.0/HighScore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
                 var newHighScore = client.PutAsync(url, null).Result;
