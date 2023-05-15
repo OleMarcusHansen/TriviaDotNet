@@ -1,12 +1,18 @@
 ﻿* {
     margin: 0 auto;
     box-sizing: border-box;
-/*    border: 3px solid black;*/
+    
 }
 
+main {
+    background-image: linear-gradient(to bottom right, red, yellow);
+}
+
+.content {
+    background-image: linear-gradient(to bottom right, red, yellow);
+}
 
 #container {
-    /*    border: 3px solid green;*/
     padding: 1rem;
     margin: 10rem;
     background-color: #f5f6f6;
@@ -14,6 +20,7 @@
     padding: 3rem;
     box-shadow: -30px -25px -25px 25px rgba(0,0,0,0.2);
     border: 5px solid #e3e1e1;
+
 }
 
 .selectValue, input {
@@ -21,6 +28,24 @@
     border-radius: 4px;
     border: 2px solid #e3e1e1;
 }
+
+.buttonStyle {
+    border-radius: 10px;
+    border: 3px solid #a9a9a9;
+    font-weight: bold;
+    padding: 13px 20px 13px 20px;
+    background-color: ghostwhite;
+    margin: 2rem 0 2rem 0;
+    max-width: 100%;
+    display: block;
+    height: 80px;
+    font-size: 20px;
+}
+
+.buttonStyle:hover {
+     background-color: #cbcbcb;
+}
+
 
 h1 {
     font-weight: bold;
@@ -30,7 +55,18 @@ h1 {
     margin: 1em 0 0.5em 0;
 }
 
-button {
-    display: block;
-    margin: 3em 0 1em 0;
+
+
+@media only screen and (max-width: 1100px) {
+    #container {
+        margin: 3.4rem;
+        font-size: 0.875;
+    }
+}
+
+
+@media only screen and (max-width: 700px) {
+    #container {
+        margin: 2rem;
+    }
 }

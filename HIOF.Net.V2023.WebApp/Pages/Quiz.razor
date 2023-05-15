@@ -9,16 +9,16 @@
 
         <h2 class="optionPick">Pick category</h2>
         <select class="selectValue" @bind="pickCategory">
-            <option value="music">music</option>
-            <option value="sport_and_leisure">sport and leisure</option>
-            <option value="film_and_tv">film and tv</option>
-            <option value="arts_and_literature">arts_and_literature</option>
-            <option value="history">history</option>
-            <option value="society_and_culture">society_and_culture</option>
-            <option value="science">science</option>
-            <option value="geography">geography</option>
-            <option value="food_and_drink">food_and_drink</option>
-            <option value="general_knowledge">general_knowledge</option>
+            <option value="music">Music</option>
+            <option value="sport_and_leisure">Sport and leisure</option>
+            <option value="film_and_tv">Film and tv</option>
+            <option value="arts_and_literature">Arts and literature</option>
+            <option value="history">History</option>
+            <option value="society_and_culture">Society and culture</option>
+            <option value="science">Science</option>
+            <option value="geography">Geography</option>
+            <option value="food_and_drink">Food and drink</option>
+            <option value="general_knowledge">General knowledge</option>
         </select>
 
         <h2 class="optionPick">Input amount of question(s):</h2>
@@ -31,42 +31,43 @@
             <option value="hard">hard</option>
         </select>
 
-        <button class="btn btn-primary" @onclick="HandleClick">Click me</button>
+        <button class="buttonStyle" @onclick="HandleClick">Click me</button>
     </div>
-
-
     <div>
-
-            @if (questions == null)
-            {
-
-            }
+        @if (questions == null)
+        {
+            Console.WriteLine("No questions");
+        }
             
+        else
+        {
+            <section>
+            @{
+                var question = nextQuestion();
+            }
+            @if (question != null)
+            {
+                <h2>@question.Question</h2>
+
+                @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
+                {
+                <button class="buttonStyle" value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
+                }
+                <p>@question.CorrectAnswer</p>
+            }
             else
             {
-            <section>
-                @{
-                    var question = nextQuestion();
-                }
-                @if (question != null)
-                {
-                        <h2>@question.Question</h2>
-
-                        @foreach (var answer in GetRandomizedAnswers(question.IncorrectAnswers, question.CorrectAnswer))
-                        {
-                            <button class="btn btn-primary" value=@answer @onclick="() => checkAnswer(answer, question)">@answer</button>
-                }
-                    <p>@question.CorrectAnswer</p>
-                }
-                else
-                {
-                    <p>No more questions...your score is @correct of @amount</p>
-                    saveScore();
-                }
-            </section>
+                <h2>No more questions...your score is @correct of @amount</h2>
+                <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
+                <button class="buttonStyle">Save your score</button>
+                saveScore();
             }
+        </section>
+        }
     </div>
 </div>
+
+
 @code {
     private string pickCategory = "history";
     private string pickDifficulty = "easy";
@@ -75,6 +76,8 @@
     private int correct = 0;
     private int wrong = 0;
     private bool showInputFromUser { get; set; } = false;
+
+
 
     private void HandleClick()
     {
@@ -109,7 +112,6 @@
 
     private void checkAnswer(string answer, Quest question)
     {
-        Console.WriteLine(question.CorrectAnswer);
         if (answer == question.CorrectAnswer) {
             correct++;
         }
@@ -123,6 +125,7 @@
     {
         if (questions.Count < 1)
             return null;
+
         Quest next = questions.First();
         questions.Remove(next);
         return next;
