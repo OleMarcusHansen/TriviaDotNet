@@ -60,7 +60,8 @@
                 }
                 else
                 {
-                    <p>No more questions...your score is @score of @amount</p>
+                    <p>No more questions...your score is @correct of @amount</p>
+                    saveScore();
                 }
             </section>
             }
@@ -71,7 +72,8 @@
     private string pickDifficulty = "easy";
     private int amount = 1;
     private List<Quest> questions;
-    private int score = 0;
+    private int correct = 0;
+    private int wrong = 0;
     private bool showInputFromUser { get; set; } = false;
 
     private void HandleClick()
@@ -109,7 +111,11 @@
     {
         Console.WriteLine(question.CorrectAnswer);
         if (answer == question.CorrectAnswer) {
-            score++;
+            correct++;
+        }
+        else
+        {
+            wrong++;
         }
     }
 
@@ -120,5 +126,24 @@
         Quest next = questions.First();
         questions.Remove(next);
         return next;
+    }
+
+    private void saveScore()
+    {
+        using var client = new HttpClient();
+        Guid userId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        var url = $"https://localhost:7160/api/1.0/UserData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+        var test = client.PutAsync(url, null).Result;
+        
+
+
+        Console.WriteLine(test.Content.ReadAsStringAsync().Result);
+
+        //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
+        
+        //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
+        //string jsonHS = client.GetStringAsync(url).Result;
+        //JObject json = JObject.Parse(jsonHS);
+        //string value = json["value"].ToString();
     }
 }
