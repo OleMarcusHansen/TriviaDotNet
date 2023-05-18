@@ -11,6 +11,8 @@ namespace program
             CreateHostBuilder(args).Build().Run();
         }
 
+        // CreateHostBuilder method
+
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             var builder = Host.CreateDefaultBuilder(args)
@@ -22,7 +24,7 @@ namespace program
                     {
                         if (int.TryParse(args[0], out int port))
                         {
-                            webBuilder.UseUrls($"http://127.0.0.1:{port}");
+                            webBuilder.UseUrls($"http://127.0.0.1:{port}/notification");
                         }
                         else
                         {
