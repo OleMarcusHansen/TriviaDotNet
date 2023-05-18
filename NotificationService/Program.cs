@@ -1,39 +1,33 @@
-using HIOF.Net.V2023.startup;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
-namespace program
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+
+// Add Swagger/OpenAPI services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    public class Program
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        // CreateHostBuilder method
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            var builder = Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-
-                    if (args.Length > 0)
-                    {
-                        if (int.TryParse(args[0], out int port))
-                        {
-                            webBuilder.UseUrls($"http://127.0.0.1:{port}/notification");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid port number. Using the default URL.");
-                        }
-                    }
-                });
-
-            return builder;
-        }
-    }
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+    });
 }
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
