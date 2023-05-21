@@ -15,11 +15,10 @@ namespace HIOF.Net.V2023.startup
     {
 
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             services.AddAuthentication("MyScheme")
-                .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyScheme", o =>
-                {
-                });
+                .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyScheme", options => { });
+
 
             services.AddSingleton<INotificationSink, NotificationService>();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();

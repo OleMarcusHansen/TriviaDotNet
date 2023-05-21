@@ -23,5 +23,6 @@ namespace HIOF.Net.V2023.Controller
             await _notificationSink.PushAsync(new HIOF.Net.V2023.Notification.Services.Notification(user, message));
             return Ok();
         }
+
     }
 }
