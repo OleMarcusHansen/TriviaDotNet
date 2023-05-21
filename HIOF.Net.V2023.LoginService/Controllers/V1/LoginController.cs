@@ -32,9 +32,7 @@ namespace HIOF.Net.V2023.LoginService.Controllers.V1
             var result = await _userManager.CreateAsync(newUser, password);
             if (result.Succeeded)
             {
-                String token = GenerateToken(username);
-
-                return Ok(new { Token = token });
+                return Ok(new { String = "Bruker registrert" });
             }
 
             var errors = result.Errors.Select(e => e.Description);
@@ -48,7 +46,8 @@ namespace HIOF.Net.V2023.LoginService.Controllers.V1
 
             if (result.Succeeded)
             {
-                String token = GenerateToken(username);
+                var token = await _userManager.GenerateUserTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token");
+                await _userManager.SetAuthenticationTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token", token);
                 return Ok(new { Token = token });
             }
             else
@@ -56,10 +55,20 @@ namespace HIOF.Net.V2023.LoginService.Controllers.V1
                 return BadRequest("Invalid username or password");
             }
         }
-
-        private String GenerateToken(string username)
+        
+        [HttpGet("Verify")]
+        public async Task<IActionResult> LoggedIn(String username, String token)
         {
-            return "token";
+            var valid = await _userManager.VerifyUserTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token", token);
+
+            if (valid)
+            {
+                return Ok(new { String = "logget inn" });
+            }
+            else
+            {
+                return BadRequest("Ikke logget inn");
+            }
         }
     }
 }
