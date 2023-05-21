@@ -19,7 +19,7 @@ namespace HIOF.Net.V2023.startup
             services.AddAuthentication("MyScheme")
                 .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyScheme", options => { });
 
-
+            services.AddScoped<NotificationService>();
             services.AddSingleton<INotificationSink, NotificationService>();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
 

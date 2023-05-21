@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Channels;
@@ -42,7 +43,6 @@ namespace HIOF.Net.V2023.Notification.Services
                 try
                 {
                     var (forUserId, message) = await _channel.Reader.ReadAsync(stoppingToken);
-
                     var payload = new { Message = message };
                     _logger.LogInformation($"Sending channel notification '{message}' to {forUserId}");
                     await _hubContext.Clients.Client(forUserId).SendAsync("Notify", payload, stoppingToken);
