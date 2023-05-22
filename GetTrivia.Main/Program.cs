@@ -1,9 +1,9 @@
 ﻿using GetTrivia.ConsoleService.Model;
-using Grpc.Net.Client;
-using GrpcGreeterClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
+using Grpc.Core;
+using Grpc.Net.Client;
 
 namespace GetTrivia.ConsoleService
 {
@@ -15,11 +15,10 @@ namespace GetTrivia.ConsoleService
 
             Console.WriteLine("Hello, World!");
 
-            var channel = GrpcChannel.ForAddress("https://localhost:7107");
-            var client = new Greeter.GreeterClient(channel);
-
-            var response = client.SayHelloAsync(
-                new HelloRequest { Name = "World" });
+            using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+            var client = new TriviaService.TriviaServiceClient(channel);
+            var reply = client.GetTrivia(new GetTriviaRequest { Category="History", Difficulty="easy", NumberOfQuestions=1 });
+            Console.WriteLine(reply.ToString());
 
             //Console.WriteLine(response.Message);
 

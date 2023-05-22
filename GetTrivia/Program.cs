@@ -1,4 +1,3 @@
-using GrpcGreeter;
 using HIOF.Net.V2023.GetTriviaService;
 
 namespace GetTrivia
@@ -33,7 +32,7 @@ namespace GetTrivia
 
             app.MapControllers();
 
-            app.MapGrpcService<GreeterService>();
+            app.MapGrpcService<TriviaGetService>();
 
             app.Run();
         }
