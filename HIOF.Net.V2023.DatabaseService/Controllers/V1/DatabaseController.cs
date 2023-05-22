@@ -44,7 +44,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             if (responseUserData == null)
             {
-                _logger.LogError("An error accured while getting all userdata(Userdata not found)");
+                _logger.LogError("An error accured while getting userdata(Userdata not found)");
                 return new Result<Data.UserData>(new Data.UserData { Id=id})
                 {
                     Errors = new List<string> { "UserData not found" }
