@@ -1,5 +1,6 @@
 ﻿@page "/quiz"
 @using GetTrivia.ConsoleService.Model;
+@using HIOF.Net.V2023.DatabaseService.Model.V1;
 
 <PageTitle>Quiz</PageTitle>
 
@@ -57,11 +58,18 @@
             }
             else
             {
-                <h2>No more questions...your score is @correct of @amount</h2>
-                <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
-                <button class="buttonStyle">Save your score</button>
-                saveScore();
-            }
+                    if (saveScore())
+                    {
+                        <h2>No more questions...your score is @correct of @amount</h2>
+                        <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
+                        <button class="buttonStyle">Save your score</button>
+                    }
+                    else
+                    {
+                        <h2>Error: user not found in database</h2>
+                        <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
+                    }
+                }
         </section>
         }
     </div>
@@ -73,9 +81,11 @@
     private string pickDifficulty = "easy";
     private int amount = 1;
     private List<Quest> questions;
+    private int score = 0;
     private int correct = 0;
     private int wrong = 0;
     private bool showInputFromUser { get; set; } = false;
+    Guid userId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"); //Default testuser
 
 
 
@@ -112,7 +122,14 @@
 
     private void checkAnswer(string answer, Quest question)
     {
-        if (answer == question.CorrectAnswer) {
+        if (answer == question.CorrectAnswer) 
+        {
+            if (pickDifficulty == "easy")
+                score += 1;
+            else if (pickDifficulty == "medium")
+                score += 2;
+            else if (pickDifficulty == "hard")
+                score += 3;
             correct++;
         }
         else
@@ -131,22 +148,44 @@
         return next;
     }
 
-    private void saveScore()
+    private Boolean saveScore()
     {
+        // if user exists, update score
+        if (userExists())
+        {
+            using var client = new HttpClient();
+            var url = $"https://localhost:7160/api/1.0/UserData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+            var test = client.PutAsync(url, null).Result;
+            Console.WriteLine(test.Content.ReadAsStringAsync().Result);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void saveHighScore()
+    {
+
+    }
+
+    private Boolean userExists()
+    {
+        //call api to check if user exists
         using var client = new HttpClient();
-        Guid userId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var url = $"https://localhost:7160/api/1.0/UserData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
-        var test = client.PutAsync(url, null).Result;
-        
-
-
-        Console.WriteLine(test.Content.ReadAsStringAsync().Result);
-
-        //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
-        
-        //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
-        //string jsonHS = client.GetStringAsync(url).Result;
-        //JObject json = JObject.Parse(jsonHS);
-        //string value = json["value"].ToString();
+        var url = $"https://localhost:7160/api/1.0/UserData/get/{userId}";
+        var test = client.GetAsync(url).Result;
+        Result<UserData> testResult = test.Content.ReadFromJsonAsync<Result<UserData>>().Result;
+        if (!testResult.HasErrors)
+        {
+            Console.WriteLine("User exists");
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("User does not exist");
+            return false;
+        }
     }
 }
