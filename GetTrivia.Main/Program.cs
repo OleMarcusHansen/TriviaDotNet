@@ -1,4 +1,6 @@
 ﻿using GetTrivia.ConsoleService.Model;
+using Grpc.Net.Client;
+using GrpcGreeterClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
@@ -13,7 +15,15 @@ namespace GetTrivia.ConsoleService
 
             Console.WriteLine("Hello, World!");
 
-            Console.WriteLine("Tast inn kategory: ");
+            var channel = GrpcChannel.ForAddress("https://localhost:7107");
+            var client = new Greeter.GreeterClient(channel);
+
+            var response = client.SayHelloAsync(
+                new HelloRequest { Name = "World" });
+
+            //Console.WriteLine(response.Message);
+
+            /*Console.WriteLine("Tast inn kategory: ");
             string? pickCat = Console.ReadLine();
 
             Console.WriteLine("Tast inn antall spørsmål: ");
@@ -94,7 +104,7 @@ namespace GetTrivia.ConsoleService
             {
                 url = $"https://localhost:7160/api/1.0/HighScore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
                 var newHighScore = client.PutAsync(url, null).Result;
-            }
+            }*/
 
             Console.WriteLine("Thank you for playing, press Enter to close");
             Console.ReadLine();
