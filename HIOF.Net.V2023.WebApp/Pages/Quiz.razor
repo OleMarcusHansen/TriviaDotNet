@@ -157,6 +157,7 @@
             var url = $"https://localhost:7160/api/1.0/UserData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
             var test = client.PutAsync(url, null).Result;
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
+            saveHighScore();
             return true;
         }
         else
@@ -167,7 +168,25 @@
 
     private void saveHighScore()
     {
-
+        if (amount >= 10)
+        {
+            using var client = new HttpClient();
+            var url = $"https://localhost:7160/api/1.0/HighScoreData/get/{userId}/{pickCategory}";
+            var test = client.GetAsync(url).Result;
+            Result<HighScore> testResult = test.Content.ReadFromJsonAsync<Result<HighScore>>().Result;
+            if (testResult.HasErrors)
+            {
+                var url2 = $"https://localhost:7160/api/1.0/HighScoreData/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+                var test2 = client.PostAsync(url2, null).Result;
+                Console.WriteLine(test2.Content.ReadAsStringAsync().Result);                
+            }
+            else if (testResult.Value.Correct/testResult.Value.Wrong < correct/wrong)
+            {
+                var url2 = $"https://localhost:7160/api/1.0/HighScoreData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+                var test2 = client.PutAsync(url2, null).Result;
+                Console.WriteLine(test2.Content.ReadAsStringAsync().Result);
+            }
+        }
     }
 
     private Boolean userExists()
