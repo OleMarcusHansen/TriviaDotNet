@@ -31,7 +31,7 @@ namespace GetTrivia.ConsoleService
             using var channel = GrpcChannel.ForAddress("https://localhost:7107");
             var clientGrpc = new TriviaService.TriviaServiceClient(channel);
             var reply = clientGrpc.GetTrivia(new GetTriviaRequest { Category = pickCat, Difficulty = difficulty, NumberOfQuestions = int.Parse(numbers) });
-            Console.WriteLine(reply.JsonData);
+            //Console.WriteLine(reply.JsonData);
 
 
             //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
