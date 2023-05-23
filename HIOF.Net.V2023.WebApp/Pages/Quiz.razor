@@ -171,18 +171,18 @@
         if (amount >= 10)
         {
             using var client = new HttpClient();
-            var url = $"https://localhost:7160/api/1.0/HighScoreData/get/{userId}/{pickCategory}";
+            var url = $"https://localhost:7160/api/1.0/HighScore/get/{userId}/{pickCategory}";
             var test = client.GetAsync(url).Result;
             Result<HighScore> testResult = test.Content.ReadFromJsonAsync<Result<HighScore>>().Result;
             if (testResult.HasErrors)
             {
-                var url2 = $"https://localhost:7160/api/1.0/HighScoreData/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+                var url2 = $"https://localhost:7160/api/1.0/HighScore/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
                 var test2 = client.PostAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);                
             }
             else if (testResult.Value.Correct/testResult.Value.Wrong < correct/wrong)
             {
-                var url2 = $"https://localhost:7160/api/1.0/HighScoreData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+                var url2 = $"https://localhost:7160/api/1.0/HighScore/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
                 var test2 = client.PutAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);
             }
