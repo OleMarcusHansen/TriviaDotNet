@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GetTrivia.Main\HIOF.Net.V2023.GetTrivia.ConsoleService.csproj" />
+    <ProjectReference Include="..\HIOF.Net.V2023.LoginService\HIOF.Net.V2023.LoginService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
