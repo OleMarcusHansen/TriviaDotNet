@@ -140,7 +140,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         }
 
         [HttpPost("HighScore/create")]
-        public async Task<Result<Data.HighScore>> CreateHighScore(Guid id, string category, int correct, int wrong)
+        public async Task<Result<Data.HighScore>> CreateHighScore(Guid id, string category, int correct, int wrong, int score)
         {
             var userData = await _userDataDbContext.UserData.FindAsync(id);
             if (userData == null)
@@ -157,7 +157,8 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Id = id,
                 Category = category,
                 Correct = correct,
-                Wrong = wrong
+                Wrong = wrong,
+                Score = score
             };
 
             _highScoreDbContext.HighScores.Add(highScore);
@@ -169,6 +170,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Category = highScore.Category,
                 Correct = highScore.Correct,
                 Wrong = highScore.Wrong,
+                Score = highScore.Score,
                 User = userData
             });
 
@@ -246,7 +248,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
         }
 
         [HttpPut("HighScore/update")]
-        public async Task<Result<Data.HighScore>> UpdateHighScore(Guid id, string category, int correct, int wrong)
+        public async Task<Result<Data.HighScore>> UpdateHighScore(Guid id, string category, int correct, int wrong, int score)
         {
             _logger.LogInformation("Called UpdateHighScore");
             
@@ -272,6 +274,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 
             highScore.Correct = correct;
             highScore.Wrong = wrong;
+            highScore.Score = score;
 
             _highScoreDbContext.HighScores.Update(highScore);
             await _highScoreDbContext.SaveChangesAsync();
@@ -282,6 +285,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Category = highScore.Category,
                 Correct = highScore.Correct,
                 Wrong = highScore.Wrong,
+                Score = highScore.Score,
                 User = userData
             });
 

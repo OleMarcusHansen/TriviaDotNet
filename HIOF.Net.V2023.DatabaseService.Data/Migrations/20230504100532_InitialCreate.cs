@@ -31,7 +31,8 @@ namespace HIOF.Net.V2023.DatabaseService.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Correct = table.Column<int>(type: "int", nullable: false),
-                    Wrong = table.Column<int>(type: "int", nullable: false)
+                    Wrong = table.Column<int>(type: "int", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
