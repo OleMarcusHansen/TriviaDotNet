@@ -65,6 +65,7 @@ namespace HIOF.Net.V2023.LoginService
             {
                 var userDbContext = scope.ServiceProvider.GetService<UserDbContext>();
                 await userDbContext.Database.MigrateAsync();
+                //await userDbContext.Database.EnsureCreatedAsync();
             }
 
             app.Run();
