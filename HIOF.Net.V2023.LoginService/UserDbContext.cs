@@ -6,6 +6,7 @@ namespace HIOF.Net.V2023.LoginService
 {
     public class UserDbContext : IdentityDbContext
     {
+        public DbSet<IdentityUser> IdentityUsers { get; set; }
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
 

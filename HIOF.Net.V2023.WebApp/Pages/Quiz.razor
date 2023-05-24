@@ -180,7 +180,7 @@
                 var test2 = client.PostAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);                
             }
-            else if (testResult.Value.Correct/testResult.Value.Wrong < correct/wrong)
+            else if ((float)(testResult.Value.Score / (testResult.Value.Wrong + testResult.Value.Correct)) < (float)(score / (wrong + correct)))
             {
                 var url2 = $"https://localhost:7160/api/1.0/HighScore/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
                 var test2 = client.PutAsync(url2, null).Result;
