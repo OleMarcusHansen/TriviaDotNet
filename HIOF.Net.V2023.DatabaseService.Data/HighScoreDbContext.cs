@@ -30,6 +30,7 @@ namespace HIOF.Net.V2023.DatabaseService.Data
                 mb.Property(highScore => highScore.Category);
                 mb.Property(highScore => highScore.Correct);
                 mb.Property(highScore => highScore.Wrong);
+                mb.Property(highScore => highScore.Score);
                 
                 mb.HasOne(highScore => highScore.User).WithMany().HasForeignKey(highScore => highScore.Id);
             });
