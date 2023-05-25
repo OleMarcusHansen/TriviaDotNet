@@ -7,7 +7,6 @@
 <div id="container">
     <div hidden="@showInputFromUser">
         <h1>Welcome to Quizgame</h1>
-
         <h2 class="optionPick">Pick category</h2>
         <select class="selectValue" @bind="pickCategory">
             <option value="music">Music</option>
@@ -32,7 +31,7 @@
             <option value="hard">hard</option>
         </select>
 
-        <button class="buttonStyle" @onclick="HandleClick">Click me</button>
+        <button class="buttonStyle" @onclick="HandleClick">Create Quiz</button>
     </div>
     <div>
         @if (questions == null)
@@ -106,7 +105,7 @@
         // Add the correct answer to the list of possible answers
         answers.Add(correctAnswer);
 
-        // Shuffle the list of answers using Fisher-Yates shuffle algorithm
+        //koden har blitt tatt fra code-maze.com/csharp-randomize-list/
         Random random = new Random();
         int n = answers.Count;
         while (n > 1)

@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using HIOF.Net.V2023.WebApp.Model.V1;
+@inject NavigationManager NavManager
 
 <PageTitle>Index</PageTitle>
 
@@ -31,6 +33,7 @@
     </div>
     <button type="submit" class="btn btn-primary" @onclick="Login">Login</button>
 </form>
+<p>@logInFromUser</p>
 
 
 
@@ -41,6 +44,7 @@
     private string email { get; set; }
     private string username { get; set; }
     private string password { get; set; }
+    private string logInFromUser { get; set; }
 
 
 
@@ -69,10 +73,17 @@
 
         var login = client.PostAsync(url, null).Result;
 
-        var token = login.Content.ReadAsStringAsync().Result;
+        Console.WriteLine(login.Content.ReadAsStringAsync().Result);
+        Console.WriteLine(login.Content.ReadFromJsonAsync<UserToken>().Result.Token);
+
+
+       
+        var token = login.Content.ReadFromJsonAsync<UserToken>().Result.Token;
 
         if (token != null)
         {
+            logInFromUser = "logg inn vellykket!";
+            NavManager.NavigateTo("/quiz");
             // Login succeeded
             // Perform necessary actions (e.g., store token, navigate to another page)
         }
