@@ -1,3 +1,5 @@
+using HIOF.Net.V2023.GetTriviaService;
+
 namespace GetTrivia
 {
     public class Program
@@ -13,6 +15,8 @@ namespace GetTrivia
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddGrpc();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,8 +30,9 @@ namespace GetTrivia
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.MapGrpcService<TriviaGetService>();
 
             app.Run();
         }

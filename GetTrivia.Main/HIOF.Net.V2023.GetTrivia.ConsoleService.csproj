@@ -8,13 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="trivia_service.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.48.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.54.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="trivia_service.proto" ProtoCompile="True" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

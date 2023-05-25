@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
+using Grpc.Core;
+using Grpc.Net.Client;
+using System.Text.Json.Serialization;
 
 namespace GetTrivia.ConsoleService
 {
@@ -32,6 +35,8 @@ namespace GetTrivia.ConsoleService
 
             hubConnection.StartAsync();
 
+            //Console.WriteLine(response.Message);
+
             Console.WriteLine("Tast inn kategory: ");
             string? pickCat = Console.ReadLine();
 
@@ -47,16 +52,27 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine("Tast inn vanskeligsgraden: ");
             string? difficulty = Console.ReadLine();
 
+            // GRPC Connection
+            using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+            var clientGrpc = new TriviaService.TriviaServiceClient(channel);
+            var reply = clientGrpc.GetTrivia(new GetTriviaRequest { Category = pickCat, Difficulty = difficulty, NumberOfQuestions = int.Parse(numbers) });
+            //Console.WriteLine(reply.JsonData);
+
+
             
             //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
 
+            //var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
+            
+            using var clientHttp = new HttpClient();
             url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
 
             Quest[] jsonQnA = Array.Empty<Quest>();
 
             try
             {
-                jsonQnA = client.GetFromJsonAsync<Quest[]>(url).Result;
+                jsonQnA = JsonConvert.DeserializeObject<Quest[]>(reply.JsonData);
+                //jsonQnA = clientHttp.GetFromJsonAsync<Quest[]>(url).Result;
             }
             catch (Exception ex)
             {
@@ -96,15 +112,15 @@ namespace GetTrivia.ConsoleService
             }
 
             //url = $"https://localhost:7160/api/1.0/UserData/00000000-0000-0000-0000-000000000001";
-            url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
-            var test = client.PutAsync(url, null).Result;
+            var url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
+            var test = clientHttp.PutAsync(url, null).Result;
 
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
 
             //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
             url = $"https://localhost:7160/api/1.0/HighScore/compareExisting?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
-            //var jsonHS = client.GetFromJsonAsync<HighScore>(url).Result;
-            string jsonHS = client.GetStringAsync(url).Result;
+            //var jsonHS = clientHttp.GetFromJsonAsync<HighScore>(url).Result;
+            string jsonHS = clientHttp.GetStringAsync(url).Result;
             JObject json = JObject.Parse(jsonHS);
             string value = json["value"].ToString();
             HighScore? highScore = JsonConvert.DeserializeObject<HighScore>(value);
@@ -112,12 +128,12 @@ namespace GetTrivia.ConsoleService
             if (highScore.Correct == 0 && highScore.Wrong == 0)
             {
                 url = $"https://localhost:7160/api/1.0/HighScore/create?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
-                var newHighScore = client.PostAsync(url, null).Result;
+                var newHighScore = clientHttp.PostAsync(url, null).Result;
             }
             else if (highScore.Correct == correct && highScore.Wrong == wrong)
             {
                 url = $"https://localhost:7160/api/1.0/HighScore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
-                var newHighScore = client.PutAsync(url, null).Result;
+                var newHighScore = clientHttp.PutAsync(url, null).Result;
             }
 
             Console.WriteLine("Thank you for playing, press Enter to close");
