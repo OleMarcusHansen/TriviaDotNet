@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HIOF.Net.V2023.LoginService.Controllers.V1
 {
-    [Route("api/1.0")]
+    [Route("api/1.0/login")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -56,7 +56,7 @@ namespace HIOF.Net.V2023.LoginService.Controllers.V1
             }
         }
         
-        [HttpGet("Verify")]
+        [HttpGet("verify")]
         public async Task<IActionResult> LoggedIn(String username, String token)
         {
             var valid = await _userManager.VerifyUserTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token", token);

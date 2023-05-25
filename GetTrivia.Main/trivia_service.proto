@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 service TriviaService {
   rpc GetTrivia(GetTriviaRequest) returns (GetTriviaResponse);

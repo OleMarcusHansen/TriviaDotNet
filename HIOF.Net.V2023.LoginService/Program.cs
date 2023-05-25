@@ -45,7 +45,7 @@ namespace HIOF.Net.V2023.LoginService
 
             builder.Services.AddDbContext<UserDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("UserLocalDb"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("UserDb"));
             });
 
             var app = builder.Build();
@@ -61,14 +61,14 @@ namespace HIOF.Net.V2023.LoginService
             app.UseAuthorization();
             app.MapControllers();
 
-            await using (var scope = app.Services.CreateAsyncScope())
+            using (var scope = app.Services.CreateScope())
             {
-                var userDbContext = scope.ServiceProvider.GetService<UserDbContext>();
-                await userDbContext.Database.MigrateAsync();
-                //await userDbContext.Database.EnsureCreatedAsync();
+                var userDbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+                await userDbContext.Database.EnsureCreatedAsync();
+                //await userDbContext.Database.MigrateAsync();
             }
 
-            app.Run();
+            await app.RunAsync();
         }
 
         /*

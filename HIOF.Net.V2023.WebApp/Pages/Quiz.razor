@@ -90,7 +90,7 @@
 
     private void HandleClick()
     {
-        var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCategory}&numbersofQuestions={amount}&difficulty={pickDifficulty}";
+        var url = $"https://localhost:7107/api/1.0/gettrivia/triviaca?category={pickCategory}&numbersofQuestions={amount}&difficulty={pickDifficulty}";
 
         //få httpclient t interface?
         using var client = new HttpClient();
@@ -153,7 +153,7 @@
         if (userExists())
         {
             using var client = new HttpClient();
-            var url = $"https://localhost:7160/api/1.0/UserData/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
+            var url = $"https://localhost:7160/api/1.0/statistics/userdata/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}";
             var test = client.PutAsync(url, null).Result;
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
             saveHighScore();
@@ -170,18 +170,18 @@
         if (amount >= 10)
         {
             using var client = new HttpClient();
-            var url = $"https://localhost:7160/api/1.0/HighScore/get/{userId}/{pickCategory}";
+            var url = $"https://localhost:7160/api/1.0/statistics/highscore/get/{userId}/{pickCategory}";
             var test = client.GetAsync(url).Result;
             Result<HighScore> testResult = test.Content.ReadFromJsonAsync<Result<HighScore>>().Result;
             if (testResult.HasErrors)
             {
-                var url2 = $"https://localhost:7160/api/1.0/HighScore/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
+                var url2 = $"https://localhost:7160/api/1.0/statistics/highscore/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
                 var test2 = client.PostAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);                
             }
-            else if (testResult.Value.Correct/testResult.Value.Wrong < correct/wrong)
+            else if ((float)(testResult.Value.Score / (testResult.Value.Wrong + testResult.Value.Correct)) < (float)(score / (wrong + correct)))
             {
-                var url2 = $"https://localhost:7160/api/1.0/HighScore/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
+                var url2 = $"https://localhost:7160/api/1.0/statistics/highscore/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
                 var test2 = client.PutAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);
             }
@@ -192,7 +192,7 @@
     {
         //call api to check if user exists
         using var client = new HttpClient();
-        var url = $"https://localhost:7160/api/1.0/UserData/get/{userId}";
+        var url = $"https://localhost:7160/api/1.0/statistics/userdata/get/{userId}";
         var test = client.GetAsync(url).Result;
         Result<UserData> testResult = test.Content.ReadFromJsonAsync<Result<UserData>>().Result;
         if (!testResult.HasErrors)

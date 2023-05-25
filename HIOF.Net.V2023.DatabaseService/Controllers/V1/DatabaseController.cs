@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
 {
     [ApiController]
-    [Route("api/1.0")]
+    [Route("api/1.0/statistics")]
     public class DatabaseController : ControllerBase
     {
 
@@ -21,7 +21,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             _highScoreDbContext = highScoreDbContext;
         }
 
-        [HttpGet("UserData/getAll")]
+        [HttpGet("userdata/getall")]
         public async Task<Result<IEnumerable<Data.UserData>>> GetAllUserData()
         {
             _logger.LogInformation("Called GetAllUserData");
@@ -36,7 +36,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<IEnumerable<Data.UserData>>(responseUserData);
         }
 
-        [HttpGet("UserData/get/{id}")]
+        [HttpGet("userdata/get/{id}")]
         public async Task<Result<Data.UserData>> GetUserData(Guid id)
         {
             _logger.LogInformation("Getting userdata");
@@ -54,7 +54,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(responseUserData);
         }
 
-        [HttpGet("UserData/average")]
+        [HttpGet("userdata/average")]
         public async Task<Result<Data.UserData>> GetAverageUserData()
         {
             _logger.LogInformation("Called GetAvarageUserData");
@@ -80,7 +80,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<Data.UserData>(averageUserData);
         }
 
-        [HttpPost("UserData/create")]
+        [HttpPost("userdata/create")]
         public async Task<Result<Data.UserData>> CreateUserData(PostUserData userDataPost)
         {
             _logger.LogInformation("Called CreateUserData");
@@ -104,7 +104,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
         
-        [HttpPut("UserData/update")]
+        [HttpPut("userdata/update")]
         public async Task<Result<Data.UserData>> UpdateUserDataAdd(Guid id, int correct, int wrong)
         {
             _logger.LogInformation("Called UpdateUserDataAdd");
@@ -139,7 +139,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
 
-        [HttpPost("HighScore/create")]
+        [HttpPost("highscore/create")]
         public async Task<Result<Data.HighScore>> CreateHighScore(Guid id, string category, int correct, int wrong, int score)
         {
             var userData = await _userDataDbContext.UserData.FindAsync(id);
@@ -177,7 +177,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return result;
         }
 
-        [HttpGet("HighScore/get/{id}/{category}")]
+        [HttpGet("highscore/get/{id}/{category}")]
         public async Task<Result<Data.HighScore>> GetHighScore(Guid id, string category)
         {
             var userData = await _userDataDbContext.UserData.FindAsync(id);
@@ -205,7 +205,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<HighScore>(responseHighScore);
         }
 
-        [HttpGet("HighScore/compareExisting")]
+        [HttpGet("highscore/compareexisting")]
         public async Task<Result<Data.HighScore>> CompareExistingHighScore(Guid id, string category, int correct, int wrong)
         {
             var userData = await _userDataDbContext.UserData.FindAsync(id);
@@ -247,7 +247,7 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
             return new Result<HighScore>(highScore);
         }
 
-        [HttpPut("HighScore/update")]
+        [HttpPut("highscore/update")]
         public async Task<Result<Data.HighScore>> UpdateHighScore(Guid id, string category, int correct, int wrong, int score)
         {
             _logger.LogInformation("Called UpdateHighScore");

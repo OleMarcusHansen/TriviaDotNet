@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 namespace GetTrivia.Controllers.V1
 {
     [ApiController]
-    [Route("api/1.0/GetTrivia")]
+    [Route("api/1.0/gettrivia")]
     public class TriviaController : ControllerBase
     {
 
@@ -28,7 +28,7 @@ namespace GetTrivia.Controllers.V1
         /// <param name="difficulty"></param>
         /// <returns></returns>
 
-        [HttpGet("TriviaCa")]
+        [HttpGet("triviaca")]
 
         public async Task<string> TriviaCa(string category = "history", int numbersofQuestions = 1, string difficulty = "easy")
         {
