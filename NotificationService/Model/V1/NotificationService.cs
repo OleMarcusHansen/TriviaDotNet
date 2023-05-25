@@ -58,9 +58,8 @@ namespace HIOF.Net.V2023.Notification.Services
                     var hub = scope.ServiceProvider.GetRequiredService<IHubContext<NotificationHub>>();
 
                     var payload = new { Message = message };
-                    await hub.Clients.All.SendAsync("Notify", new { Message = "tttttt" }, stoppingToken);
                     _logger.LogInformation($"Sending channel notification '{message}' to {forUserId}");
-                    await hub.Clients.User(forUserId).SendAsync("Notify", payload, stoppingToken);
+                    await hub.Clients.User(forUserId).SendAsync("Notify", message, stoppingToken);
 
                     /*using var scope = _serviceProvider.CreateScope();
 

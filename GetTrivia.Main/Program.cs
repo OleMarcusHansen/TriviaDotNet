@@ -15,7 +15,7 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine("Hello, World!");
 
             var hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7043/notificationHub?user=test")
+                .WithUrl("https://localhost:7043/notificationHub?user=00000000-0000-0000-0000-000000000001")
                 .Build();
 
             hubConnection.Closed += async (error) =>
@@ -32,14 +32,13 @@ namespace GetTrivia.ConsoleService
 
             hubConnection.StartAsync();
 
+
             Console.WriteLine("Tast inn kategory: ");
             string? pickCat = Console.ReadLine();
 
-
-            var url = $"https://localhost:7043/notify?user=test&message=hei";
+            var url = $"https://localhost:7043/notify?user=00000000-0000-0000-0000-000000000001&message=Du valgte {pickCat} ja :J";
             using var client = new HttpClient();
-            var testNotify = client.GetStringAsync(url);
-            Console.WriteLine(testNotify.Result);
+            client.GetStringAsync(url);
 
             Console.WriteLine("Tast inn antall spørsmål: ");
             string? numbers = Console.ReadLine();
