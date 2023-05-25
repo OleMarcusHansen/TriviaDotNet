@@ -46,9 +46,10 @@ namespace HIOF.Net.V2023.LoginService.Controllers.V1
 
             if (result.Succeeded)
             {
-                var token = await _userManager.GenerateUserTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token");
-                await _userManager.SetAuthenticationTokenAsync(_userManager.FindByNameAsync(username).Result, "Default", "token", token);
-                return Ok(new { Token = token });
+                var user = _userManager.FindByNameAsync(username).Result;
+                var token = await _userManager.GenerateUserTokenAsync(user, "Default", "token");
+                await _userManager.SetAuthenticationTokenAsync(user, "Default", "token", token);
+                return Ok(new { Token = token, Id = user.Id });
             }
             else
             {
