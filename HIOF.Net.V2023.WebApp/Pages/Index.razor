@@ -44,16 +44,16 @@
 
 
 
-    //https://localhost:7136/api/1.0/register?email={email}&username={username}&password={password};
+    //https://localhost:7136/api/1.0/login/register?email={email}&username={username}&password={password};
 
-    //https://localhost:7136/api/1.0/login?username={username}&password={}
+    //https://localhost:7136/api/1.0/login/login?username={username}&password={}
 
-    //https://localhost:7136/api/1.0/Verify?username={username}&token={password}
+    //https://localhost:7136/api/1.0/login/verify?username={username}&token={password}
 
 
     private void registerUser()
     {
-        var url = $"https://localhost:7136/api/1.0/register?email={email}&username={username}&password={password}";
+        var url = $"https://localhost:7136/api/1.0/login/register?email={email}&username={username}&password={password}";
 
         using var client = new HttpClient();
 
@@ -63,7 +63,7 @@
 
     private void Login()
     {
-        var url = $"https://localhost:7136/api/1.0/login?username={username}&password={password}";
+        var url = $"https://localhost:7136/api/1.0/login/login?username={username}&password={password}";
 
         using var client = new HttpClient();
 

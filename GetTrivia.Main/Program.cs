@@ -18,7 +18,7 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine("Hello, World!");
 
             var hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7043/notificationHub?user=00000000-0000-0000-0000-000000000001")
+                .WithUrl("https://localhost:7043/notificationhub?user=00000000-0000-0000-0000-000000000001")
                 .Build();
 
             hubConnection.Closed += async (error) =>
@@ -39,7 +39,7 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine("Tast inn kategory: ");
             string? pickCat = Console.ReadLine();
 
-            var url = $"https://localhost:7043/notify?user=00000000-0000-0000-0000-000000000001&message=Du valgte {pickCat} ja :J";
+            var url = $"https://localhost:7043/api/1.0/notification/notify?user=00000000-0000-0000-0000-000000000001&message=Du valgte {pickCat} ja :J";
             using var client = new HttpClient();
             client.GetStringAsync(url);
 
@@ -57,12 +57,12 @@ namespace GetTrivia.ConsoleService
 
 
             
-            //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
+            //https://localhost:7107/api/1.0/gettrivia/triviaca?category=history&numbersofQuestions=1&difficulty=easy
 
-            //var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
+            //var url = $"https://localhost:7107/api/1.0/gettrivia/triviaca?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
             
             using var clientHttp = new HttpClient();
-            url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
+            url = $"https://localhost:7107/api/1.0/gettrivia/triviaca?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
 
             Quest[] jsonQnA = Array.Empty<Quest>();
 
@@ -108,14 +108,14 @@ namespace GetTrivia.ConsoleService
                 Console.WriteLine("\n");
             }
 
-            //url = $"https://localhost:7160/api/1.0/UserData/00000000-0000-0000-0000-000000000001";
-            url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
+            //url = $"https://localhost:7160/api/1.0/statistics/userdata/00000000-0000-0000-0000-000000000001";
+            url = $"https://localhost:7160/api/1.0/statistics/userdata/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
             var test = clientHttp.PutAsync(url, null).Result;
 
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
 
-            //url = $"https://localhost:7160/api/1.0/HighScore/get/00000000-0000-0000-0000-000000000001/history";
-            url = $"https://localhost:7160/api/1.0/HighScore/compareExisting?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
+            //url = $"https://localhost:7160/api/1.0/statistics/highscore/get/00000000-0000-0000-0000-000000000001/history";
+            url = $"https://localhost:7160/api/1.0/statistics/highscore/compareexisting?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
             //var jsonHS = clientHttp.GetFromJsonAsync<HighScore>(url).Result;
             string jsonHS = clientHttp.GetStringAsync(url).Result;
             JObject json = JObject.Parse(jsonHS);
@@ -124,12 +124,12 @@ namespace GetTrivia.ConsoleService
 
             if (highScore.Correct == 0 && highScore.Wrong == 0)
             {
-                url = $"https://localhost:7160/api/1.0/HighScore/create?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
+                url = $"https://localhost:7160/api/1.0/statistics/highscore/create?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
                 var newHighScore = clientHttp.PostAsync(url, null).Result;
             }
             else if (highScore.Correct == correct && highScore.Wrong == wrong)
             {
-                url = $"https://localhost:7160/api/1.0/HighScore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
+                url = $"https://localhost:7160/api/1.0/statistics/highscore/update?id=00000000-0000-0000-0000-000000000001&category={pickCat}&correct={correct}&wrong={wrong}";
                 var newHighScore = clientHttp.PutAsync(url, null).Result;
             }
 

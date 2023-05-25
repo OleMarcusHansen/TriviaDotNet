@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace HIOF.Net.V2023.Controller
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/1.0/notification")]
     public class NotificationController : ControllerBase
     {
         private readonly INotificationSink _notificationSink;
@@ -18,7 +18,7 @@ namespace HIOF.Net.V2023.Controller
         public NotificationController(INotificationSink notificationSink) => _notificationSink = notificationSink;
 
         [Authorize]
-        [HttpGet("/notify")]
+        [HttpGet("notify")]
         public async Task<IActionResult> Notify(string user, string message)
         {
             Console.WriteLine(message);
