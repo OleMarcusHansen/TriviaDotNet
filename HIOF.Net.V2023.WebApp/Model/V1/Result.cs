@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HIOF.Net.V2023.DatabaseService.Model.V1
+namespace HIOF.Net.V2023.WebApp.Model.V1
 {
     public class Result<T>
     {

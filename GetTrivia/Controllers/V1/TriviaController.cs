@@ -70,9 +70,25 @@ namespace GetTrivia.Controllers.V1
 
                 return json;
             } */
+        }
 
+        [HttpGet("categories")]
+        public async Task<string[]> GetCategories()
+        {
+            using var client = new HttpClient();
 
+            //Er kategori og difficulty er valgfri, kan vi bruke ternery
+            _logger.LogInformation("Getting categories from API");
+            var jsonFileUrl = $"https://the-trivia-api.com/api/categories";
+            var questions = await client.GetFromJsonAsync<Dictionary<string, List<string>>>(jsonFileUrl);
 
+            var response = new string[questions.Count];
+            for (int i = 0; i < questions.Count; i++)
+            {
+                response[i] = (questions.Values.ElementAt(i).ElementAt(0));
+            }
+
+            return response;
         }
     }
 }
