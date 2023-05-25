@@ -7,7 +7,24 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
+using Microsoft.Extensions.Hosting;
+using HIOF.Net.V2023.Notification.startup;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
+/*var hostBuilder = new HostBuilder()
+        .ConfigureServices((hostContext, services) =>
+        {
+            services.AddSignalR();
+
+            services.AddSingleton<NotificationHub>();
+            services.AddSingleton<NotificationService>();
+
+            services.AddHostedService<NotificationService>();
+        });
+
+await hostBuilder.RunConsoleAsync();*/
+/*
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -32,6 +49,7 @@ builder.Services.AddHostedService<NotificationService>();
 
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,4 +78,20 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
-app.Run();
+app.Run();*/
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>()
+                    .UseUrls($"https://localhost:7043");
+            });
+}

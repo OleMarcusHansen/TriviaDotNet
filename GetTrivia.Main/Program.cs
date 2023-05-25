@@ -1,4 +1,5 @@
 ﻿using GetTrivia.ConsoleService.Model;
+using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
@@ -13,8 +14,32 @@ namespace GetTrivia.ConsoleService
 
             Console.WriteLine("Hello, World!");
 
+            var hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:7043/notificationHub?user=test")
+                .Build();
+
+            hubConnection.Closed += async (error) =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                await hubConnection.StartAsync();
+            };
+
+            // Define a method for receiving hub messages
+            hubConnection.On<string>("Notify", (message) =>
+            {
+                Console.WriteLine($"Received notification: {message}");
+            });
+
+            hubConnection.StartAsync();
+
             Console.WriteLine("Tast inn kategory: ");
             string? pickCat = Console.ReadLine();
+
+
+            var url = $"https://localhost:7043/notify?user=test&message=hei";
+            using var client = new HttpClient();
+            var testNotify = client.GetStringAsync(url);
+            Console.WriteLine(testNotify.Result);
 
             Console.WriteLine("Tast inn antall spørsmål: ");
             string? numbers = Console.ReadLine();
@@ -22,11 +47,10 @@ namespace GetTrivia.ConsoleService
             Console.WriteLine("Tast inn vanskeligsgraden: ");
             string? difficulty = Console.ReadLine();
 
+            
             //https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category=history&numbersofQuestions=1&difficulty=easy
 
-            var url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
-            
-            using var client = new HttpClient();
+            url = $"https://localhost:7107/api/1.0/GetTrivia/TriviaCa?category={pickCat}&numbersofQuestions={numbers}&difficulty={difficulty}";
 
             Quest[] jsonQnA = Array.Empty<Quest>();
 

@@ -9,21 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using HIOF.Net.V2023.Controller;
 
-namespace HIOF.Net.V2023.startup
+namespace HIOF.Net.V2023.Notification.startup
 {
     public class Startup
     {
-
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
             services.AddAuthentication("MyScheme")
-                .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyScheme", options => { });
+                .AddScheme<AuthenticationSchemeOptions, AuthenticationHandler>("MyScheme", options =>
+                {
+                });
 
-            services.AddScoped<NotificationService>();
             services.AddSingleton<INotificationSink, NotificationService>();
+            services.AddHostedService(sp => (NotificationService)sp.GetService<INotificationSink>());
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
-
-            services.AddHostedService<NotificationService>();
 
             services.AddSignalR();
             services.AddControllers();
@@ -47,11 +46,7 @@ namespace HIOF.Net.V2023.startup
             {
                 endpoints.MapHub<NotificationHub>("/notificationHub");
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
         }
     }
 }
