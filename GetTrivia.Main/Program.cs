@@ -109,7 +109,7 @@ namespace GetTrivia.ConsoleService
             }
 
             //url = $"https://localhost:7160/api/1.0/UserData/00000000-0000-0000-0000-000000000001";
-            var url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
+            url = $"https://localhost:7160/api/1.0/UserData/update?id=00000000-0000-0000-0000-000000000001&correct={correct}&wrong={wrong}";
             var test = clientHttp.PutAsync(url, null).Result;
 
             Console.WriteLine(test.Content.ReadAsStringAsync().Result);
