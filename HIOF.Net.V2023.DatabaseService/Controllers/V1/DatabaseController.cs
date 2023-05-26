@@ -174,6 +174,10 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 User = userData
             });
 
+            var url = $"https://localhost:7043/api/1.0/notification/notify?user={id}&message=Congrats on your first ever high score in the {category} category!";
+            using var client = new HttpClient();
+            await client.GetAsync(url);
+
             return result;
         }
 
@@ -288,6 +292,10 @@ namespace HIOF.Net.V2023.DatabaseService.Controllers.V1
                 Score = highScore.Score,
                 User = userData
             });
+
+            var url = $"https://localhost:7043/api/1.0/notification/notify?user={id}&message=Congrats on your new high score in the {category} category!";
+            using var client = new HttpClient();
+            await client.GetStringAsync(url);
 
             return result;
         }

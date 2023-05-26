@@ -1,6 +1,7 @@
 ﻿@page "/quiz"
-@using GetTrivia.ConsoleService.Model;
-@using HIOF.Net.V2023.DatabaseService.Model.V1;
+@using HIOF.Net.V2023.WebApp.Model.V1;
+@using Grpc.Net.Client;
+@using System.Text.Json;
 
 <PageTitle>Quiz</PageTitle>
 
@@ -9,7 +10,11 @@
         <h1>Welcome to Quizgame</h1>
         <h2 class="optionPick">Pick category</h2>
         <select class="selectValue" @bind="pickCategory">
-            <option value="music">Music</option>
+            @foreach (string category in categories)
+            {
+                <option value="@category">@category</option>
+            }
+            <!--<option value="music">Music</option>
             <option value="sport_and_leisure">Sport and leisure</option>
             <option value="film_and_tv">Film and tv</option>
             <option value="arts_and_literature">Arts and literature</option>
@@ -18,7 +23,7 @@
             <option value="science">Science</option>
             <option value="geography">Geography</option>
             <option value="food_and_drink">Food and drink</option>
-            <option value="general_knowledge">General knowledge</option>
+            <option value="general_knowledge">General knowledge</option>-->
         </select>
 
         <h2 class="optionPick">Input amount of question(s):</h2>
@@ -85,15 +90,31 @@
     private bool showInputFromUser { get; set; } = false;
     Guid userId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"); //Default testuser
 
+    string[] categories;
 
+    protected override async Task OnInitializedAsync()
+    {
+        // GRPC Connection
+        using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+        var clientGrpc = new TriviaService.TriviaServiceClient(channel);
+        var reply = clientGrpc.GetCategories(new NoRequest());
+        categories = reply.Categories.ToArray();
+    }
 
     private void HandleClick()
     {
-        var url = $"https://localhost:7107/api/1.0/gettrivia/triviaca?category={pickCategory}&numbersofQuestions={amount}&difficulty={pickDifficulty}";
+        // GRPC Connection
+        using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+        var clientGrpc = new TriviaService.TriviaServiceClient(channel);
+        var reply = clientGrpc.GetTrivia(new GetTriviaRequest { Category = pickCategory, Difficulty = pickDifficulty, NumberOfQuestions = amount });
+        var jsonQnA = JsonSerializer.Deserialize<List<Quest>>(reply.JsonData);
+
+        /*var url = $"https://localhost:7107/api/1.0/gettrivia/triviaca?category={pickCategory}&numbersofQuestions={amount}&difficulty={pickDifficulty}";
 
         //få httpclient t interface?
         using var client = new HttpClient();
-        var jsonQnA = client.GetFromJsonAsync<List<Quest>>(url).Result;
+        var jsonQnA = client.GetFromJsonAsync<List<Quest>>(url).Result;*/
+
         questions = jsonQnA;
 
         showInputFromUser = !showInputFromUser;

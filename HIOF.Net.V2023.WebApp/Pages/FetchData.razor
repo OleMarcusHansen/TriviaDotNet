@@ -1,48 +1,118 @@
 ﻿@page "/fetchdata"
 
-<PageTitle>Weather forecast</PageTitle>
+<PageTitle>Statistics</PageTitle>
 
-@using HIOF.Net.V2023.WebApp.Data
-@inject WeatherForecastService ForecastService
+@inject IJSRuntime JSRuntime;
+@using Microsoft.AspNetCore.SignalR.Client;
 
-<h1>Weather forecast</h1>
+@using HIOF.Net.V2023.WebApp.Model.V1;
+@using Grpc.Net.Client;
 
-<p>This component demonstrates fetching data from a service.</p>
+<h1>Statistics</h1>
 
-@if (forecasts == null)
+<h3>User Data:</h3>
+<p>Here is your user data :)</p>
+
+@if (!userData.HasErrors)
 {
-    <p><em>Loading...</em></p>
+    <p>Total correct answers: @userData.Value.Correct</p>
+    <p>Total wrong answers: @userData.Value.Wrong</p>
 }
 else
+{
+    foreach (string error in userData.Errors)
+    {
+        <p>@error</p>
+    }
+}
+
+<p>The world average is @average.Value.Correct Correct and @average.Value.Wrong Wrong</p>
+
+<h3>High Scores:</h3>
+
+@if (categories != null)
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Category</th>
+                <th>Score</th>
+                <th>Correct answers</th>
+                <th>Wrong answers</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
+        @for (int i = 0; i < categories.Length; i++)
+        {
+            <tr>
+                <td>@categories[i]</td>
+                @if (!highScores[i].HasErrors)
+                {
+                    <td>@highScores[i].Value.Score</td>
+                    <td>@highScores[i].Value.Correct</td>
+                    <td>@highScores[i].Value.Wrong</td>
+                }
+                else
+                {
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                }
+            </tr>
+        }
     </table>
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    Result<UserData> userData;
+    Result<UserData> average;
+    Result<HighScore>[] highScores;
+    string[] categories;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        using var clientHttp = new HttpClient();
+
+        var url = $"https://localhost:7160/api/1.0/statistics/userdata/get/3fa85f64-5717-4562-b3fc-2c963f66afa7";
+        userData = clientHttp.GetFromJsonAsync<Result<UserData>>(url).Result;
+
+        url = $"https://localhost:7160/api/1.0/statistics/userdata/average";
+        average = clientHttp.GetFromJsonAsync<Result<UserData>>(url).Result;
+
+        // GRPC Connection
+        using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+        var clientGrpc = new TriviaService.TriviaServiceClient(channel);
+        var reply = clientGrpc.GetCategories(new NoRequest());
+        categories = reply.Categories.ToArray();
+
+        // HTTP Connection
+        //url = $"https://localhost:7107/api/1.0/gettrivia/categories";
+        //categories = clientHttp.GetFromJsonAsync<string[]>(url).Result;
+
+        highScores = new Result<HighScore>[categories.Length];
+
+        for (int i = 0; i < categories.Length; i++)
+        {
+            url = $"https://localhost:7160/api/1.0/statistics/highscore/get/3fa85f64-5717-4562-b3fc-2c963f66afa7/{categories[i]}";
+            highScores[i] = clientHttp.GetFromJsonAsync<Result<HighScore>>(url).Result;
+        }
+
+        // SignalR
+        var hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:7043/notificationhub?user=3fa85f64-5717-4562-b3fc-2c963f66afa7")
+                .Build();
+
+        hubConnection.Closed += async (error) =>
+        {
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            await hubConnection.StartAsync();
+        };
+
+        // Define a method for receiving hub messages
+        hubConnection.On<string>("Notify", (message) =>
+        {
+            JSRuntime.InvokeVoidAsync("alert", message);
+        });
+
+        hubConnection.StartAsync();
     }
 }

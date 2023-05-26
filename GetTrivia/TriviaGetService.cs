@@ -19,7 +19,7 @@ namespace HIOF.Net.V2023.GetTriviaService
             using var client = new HttpClient();
 
             //Er kategori og difficulty er valgfri, kan vi bruke ternery
-            _logger.LogInformation("Getting data from API");
+            _logger.LogInformation("Getting questions from API");
             var jsonFileUrl = $"https://the-trivia-api.com/api/questions?categories={request.Category}&limit={request.NumberOfQuestions}&difficulty={request.Difficulty}";
             var questions = await client.GetFromJsonAsync<Quest[]>(jsonFileUrl);
 
@@ -41,6 +41,24 @@ namespace HIOF.Net.V2023.GetTriviaService
 
             var response = new GetTriviaResponse();
             response.JsonData = JsonSerializer.Serialize(questions);
+
+            return response;
+        }
+
+        public async override Task<GetCategoriesResponse> GetCategories(NoRequest request, ServerCallContext context)
+        {
+            using var client = new HttpClient();
+
+            //Er kategori og difficulty er valgfri, kan vi bruke ternery
+            _logger.LogInformation("Getting categories from API");
+            var jsonFileUrl = $"https://the-trivia-api.com/api/categories";
+            var questions = await client.GetFromJsonAsync<Dictionary<string, List<string>>>(jsonFileUrl);
+
+            var response = new GetCategoriesResponse();
+            for (int i = 0; i < questions.Count; i++)
+            {
+                response.Categories.Add(questions.Values.ElementAt(i).ElementAt(0));
+            }
 
             return response;
         }

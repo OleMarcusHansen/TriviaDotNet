@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="trivia_service.proto" ProtoCompile="True" />
+    <Protobuf Include="trivia_service.proto" ProtoCompile="True" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>
