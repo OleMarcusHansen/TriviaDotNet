@@ -2,9 +2,6 @@
 
 <PageTitle>Statistics</PageTitle>
 
-@inject IJSRuntime JSRuntime;
-@using Microsoft.AspNetCore.SignalR.Client;
-
 @using HIOF.Net.V2023.WebApp.Model.V1;
 @using Grpc.Net.Client;
 
@@ -95,24 +92,5 @@ else
             url = $"https://localhost:7160/api/1.0/statistics/highscore/get/3fa85f64-5717-4562-b3fc-2c963f66afa7/{categories[i]}";
             highScores[i] = clientHttp.GetFromJsonAsync<Result<HighScore>>(url).Result;
         }
-
-        // SignalR
-        var hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7043/notificationhub?user=3fa85f64-5717-4562-b3fc-2c963f66afa7")
-                .Build();
-
-        hubConnection.Closed += async (error) =>
-        {
-            await Task.Delay(TimeSpan.FromSeconds(5));
-            await hubConnection.StartAsync();
-        };
-
-        // Define a method for receiving hub messages
-        hubConnection.On<string>("Notify", (message) =>
-        {
-            JSRuntime.InvokeVoidAsync("alert", message);
-        });
-
-        hubConnection.StartAsync();
     }
 }

@@ -2,8 +2,53 @@
 
 <PageTitle>Notifikasjon</PageTitle>
 
-<h1>Hello, world!</h1>
+@using Microsoft.AspNetCore.SignalR.Client;
+@inject IJSRuntime JSRuntime;
 
-Welcome to your new app.
+<h1>Notifications</h1>
+<h3>Your recent notifications:</h3>
+@foreach (string message in messages)
+{
+    <p>@message</p>
+}
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    static LinkedList<string> messages;
+    static HubConnection hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (messages == null)
+        {
+            messages = new LinkedList<string>();
+        }
+
+        if (hubConnection == null)
+        {
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:7043/notificationhub?user=3fa85f64-5717-4562-b3fc-2c963f66afa7")
+                .Build();
+
+            hubConnection.Closed += async (error) =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                await hubConnection.StartAsync();
+            };
+
+            // Define a method for receiving hub messages
+            hubConnection.On<string>("Notify", (message) =>
+            {
+                messages.AddFirst(message);
+                JSRuntime.InvokeVoidAsync("alert", message);
+            });
+
+            await hubConnection.StartAsync();
+
+            // Send a notification
+            var url = $"https://localhost:7043/api/1.0/notification/notify?user=3fa85f64-5717-4562-b3fc-2c963f66afa7&message=Started receiving notifications";
+            using var client = new HttpClient();
+            await client.GetAsync(url);
+        }
+        
+    }
+}
