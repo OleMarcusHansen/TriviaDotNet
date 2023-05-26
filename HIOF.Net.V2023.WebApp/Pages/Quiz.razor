@@ -63,7 +63,8 @@
             {
                     if (saveScore())
                     {
-                        <h2>No more questions...your score is @correct of @amount</h2>
+                        <h2>No more questions... you got @correct out of @amount</h2>
+                        <h2>Your score is @score due to difficulty: @pickDifficulty</h2>
                         <button class="buttonStyle" onClick="document.location.reload(true)">New game</button>
                     }
                     else
@@ -192,13 +193,18 @@
             var url = $"https://localhost:7160/api/1.0/statistics/highscore/get/{userId}/{pickCategory}";
             var test = client.GetAsync(url).Result;
             Result<HighScore> testResult = test.Content.ReadFromJsonAsync<Result<HighScore>>().Result;
+            float dataamount = (float)testResult.Value.Wrong + testResult.Value.Correct;
+            float datascore = (float)testResult.Value.Score;
+            float fscore = (float)score;
+            float famount = (float)amount;
+
             if (testResult.HasErrors)
             {
                 var url2 = $"https://localhost:7160/api/1.0/statistics/highscore/create?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
                 var test2 = client.PostAsync(url2, null).Result;
                 Console.WriteLine(test2.Content.ReadAsStringAsync().Result);                
             }
-            else if ((float)(testResult.Value.Score / (testResult.Value.Wrong + testResult.Value.Correct)) < (float)(score / (wrong + correct)))
+            else if (datascore/dataamount < fscore/famount)
             {
                 var url2 = $"https://localhost:7160/api/1.0/statistics/highscore/update?id={userId}&category={pickCategory}&correct={correct}&wrong={wrong}&score={score}";
                 var test2 = client.PutAsync(url2, null).Result;
