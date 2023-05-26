@@ -3,6 +3,7 @@
 <PageTitle>Statistics</PageTitle>
 
 @using HIOF.Net.V2023.WebApp.Model.V1;
+@using Grpc.Net.Client;
 
 <h1>Statistics</h1>
 
@@ -68,8 +69,15 @@ else
         var url = $"https://localhost:7160/api/1.0/statistics/userdata/get/3fa85f64-5717-4562-b3fc-2c963f66afa7";
         userData = clientHttp.GetFromJsonAsync<Result<UserData>>(url).Result;
 
-        url = $"https://localhost:7107/api/1.0/gettrivia/categories";
-        categories = clientHttp.GetFromJsonAsync<string[]>(url).Result;
+        // GRPC Connection
+        using var channel = GrpcChannel.ForAddress("https://localhost:7107");
+        var clientGrpc = new TriviaService.TriviaServiceClient(channel);
+        var reply = clientGrpc.GetCategories(new NoRequest());
+        categories = reply.Categories.ToArray();
+
+        // HTTP Connection
+        //url = $"https://localhost:7107/api/1.0/gettrivia/categories";
+        //categories = clientHttp.GetFromJsonAsync<string[]>(url).Result;
 
         highScores = new Result<HighScore>[categories.Length];
 
