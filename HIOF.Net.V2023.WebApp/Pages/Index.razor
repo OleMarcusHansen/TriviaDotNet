@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using HIOF.Net.V2023.WebApp.Model.V1;
 @inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime;
 
 <PageTitle>Index</PageTitle>
 
@@ -41,43 +42,37 @@
     private string username { get; set; }
     private string password { get; set; }
     private string logInFromUser { get; set; }
-
-
-
     //https://localhost:7136/api/1.0/login/register?email={email}&username={username}&password={password};
-
     //https://localhost:7136/api/1.0/login/login?username={username}&password={}
-
     //https://localhost:7136/api/1.0/login/verify?username={username}&token={password}
-
-
     private void registerUser()
     {
         var url = $"https://localhost:7136/api/1.0/login/register?email={email}&username={username}&password={password}";
-
         using var client = new HttpClient();
-
         var register = client.PostAsync(url, null).Result;
+    }
+
+    async void setUser()
+    {
 
     }
 
     private void Login()
     {
         var url = $"https://localhost:7136/api/1.0/login/login?username={username}&password={password}";
-
         using var client = new HttpClient();
-
         var login = client.PostAsync(url, null).Result;
-
-        Console.WriteLine(login.Content.ReadAsStringAsync().Result);
-        Console.WriteLine(login.Content.ReadFromJsonAsync<UserToken>().Result.Token);
-
-
-       
-        var token = login.Content.ReadFromJsonAsync<UserToken>().Result.Token;
+        var result = login.Content.ReadFromJsonAsync<UserToken>().Result;
+        var token = result.Token;
+        var id = result.Id;
 
         if (token != null)
         {
+            
+            //JSRuntime.InvokeVoidAsync("alert", null);
+            JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "token", token);
+            JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "id", id);
+            //retrievedData = JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "myKey");
             logInFromUser = "logg inn vellykket!";
             NavManager.NavigateTo("/quiz");
             // Login succeeded
