@@ -5,9 +5,9 @@
 @using HIOF.Net.V2023.WebApp.Model.V1;
 @using Grpc.Net.Client;
 
-<h1>Statistics</h1>
+<h1 class="headerName">Statistics</h1>
 
-<h3>User Data:</h3>
+<h3 class="underHeader">User Data:</h3>
 <p>Here is your user data :)</p>
 
 @if (!userData.HasErrors)
@@ -25,7 +25,7 @@ else
 
 <p>The world average is @average.Value.Correct Correct and @average.Value.Wrong Wrong</p>
 
-<h3>High Scores:</h3>
+<h3 class="underHeader">High Scores:</h3>
 
 @if (categories != null)
 {
